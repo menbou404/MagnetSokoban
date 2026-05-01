@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cnqtd7x56oxk8"]
+
+[ext_resource type="Script" uid="uid://cv7de6rn17lqw" path="res://scenes/main/main.gd" id="1_u1xfj"]
+[ext_resource type="Script" uid="uid://d16ld0s7haqgr" path="res://scenes/board/BoradView.gd" id="2_nha0i"]
+[ext_resource type="Texture2D" uid="uid://1u3fdqlagjq8" path="res://assets/temp/images/ground.png" id="3_sjxhf"]
+[ext_resource type="Texture2D" uid="uid://dsnofqc8842hc" path="res://assets/temp/images/block.png" id="4_ko0rf"]
+[ext_resource type="Texture2D" uid="uid://bt5wwv856a588" path="res://assets/temp/images/goal.png" id="5_ostsq"]
+[ext_resource type="Texture2D" uid="uid://bly6xwca1yfx4" path="res://assets/temp/images/box.png" id="6_3km4f"]
+[ext_resource type="Texture2D" uid="uid://b22umppyrl7bg" path="res://assets/temp/images/player_noanim.png" id="7_qkm1d"]
+
+[node name="Main" type="Node2D" unique_id=173376134]
+script = ExtResource("1_u1xfj")
+
+[node name="BoardView" type="Node2D" parent="." unique_id=1147640901]
+script = ExtResource("2_nha0i")
+tex_floor = ExtResource("3_sjxhf")
+tex_wall = ExtResource("4_ko0rf")
+tex_goal = ExtResource("5_ostsq")
+tex_box = ExtResource("6_3km4f")
+tex_player = ExtResource("7_qkm1d")
