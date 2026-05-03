@@ -17,6 +17,22 @@
 
 #### 内容
 
+PHASE_04_CONFLICT_RESOLUTION として、磁力作用の競合解決を `MagnetResolver` に実装した。
+`MagneticInteractionCandidate` 相当の Dictionary と `PlannedMove` 相当の Dictionary を導入し、強さが異なる場合は `strength` の強い側の作用を逐次適用し、同強度の場合は両者の次の 1 マス移動候補を一括適用する。
+
+#### 理由
+
+複数の磁力作用が同時に成立する局面で、強い磁力優先と同強度時の同時処理を決定的なマス単位処理として扱うため。
+
+#### 次
+
+PHASE_05_GAMEPLAY_CONTENT で、磁力到達距離、引力、反発、連鎖、競合解決を確認できる最小面を追加する。
+「強い磁力」の厳密な比較式と複数組の同時処理の解決順は未確定のまま残す。
+
+### 2026-05-03
+
+#### 内容
+
 PHASE_03_MAGNET_CORE として、押された箱を最初の起点にする磁力連鎖の最小版を実装した。
 `MagnetResolver` は直線上の最初の対象だけを探索し、`source.strength + target.strength >= distance` の距離判定、向かい合う面の極による引力 / 反発、1 マス単位の対象移動、`processed_sources` / `pending_sources` による連鎖管理を行う。
 
