@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="MagSoko"
-run/main_scene="uid://cd00bee84n670"
+run/main_scene="uid://cnqtd7x56oxk8"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
