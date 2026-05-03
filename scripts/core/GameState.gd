@@ -56,11 +56,15 @@ func is_inside_board(pos: Vector2i) -> bool:
 	return pos.x >= 0 and pos.x < board_size.x and pos.y >= 0 and pos.y < board_size.y
 
 
+func is_wall(pos: Vector2i) -> bool:
+	return walls.has(pos)
+
+
 func is_cell_free(pos: Vector2i, ignore_body_id: int = -1) -> bool:
 	if not is_inside_board(pos):
 		return false
 
-	if walls.has(pos):
+	if is_wall(pos):
 		return false
 
 	for body in bodies:

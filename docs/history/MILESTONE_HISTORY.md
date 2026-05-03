@@ -17,6 +17,22 @@
 
 #### 内容
 
+PHASE_03_MAGNET_CORE として、押された箱を最初の起点にする磁力連鎖の最小版を実装した。
+`MagnetResolver` は直線上の最初の対象だけを探索し、`source.strength + target.strength >= distance` の距離判定、向かい合う面の極による引力 / 反発、1 マス単位の対象移動、`processed_sources` / `pending_sources` による連鎖管理を行う。
+
+#### 理由
+
+磁力を常時発生させず、箱を押した直後にだけ決定的なマス単位処理として連鎖させる PHASE_03 の要件を満たすため。
+
+#### 次
+
+PHASE_04_CONFLICT_RESOLUTION で、強い磁力優先と同強度時の同時処理を正式に実装する。
+連鎖時の起点ごとの処理方向は未確定のため、現時点では押した方向を引き継ぐ暫定扱いとする。
+
+### 2026-05-03
+
+#### 内容
+
 PHASE_02_DATA_MODEL として、箱の内部表現を `MagneticBodyState` 中心に再設計した。  
 `GameState` は旧 `boxes + box_poles` ではなく `bodies` を保持し、ロード、移動、Undo、クリア判定、描画の主経路を新構造へ接続した。
 

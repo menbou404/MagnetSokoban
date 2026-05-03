@@ -17,6 +17,16 @@
 
 ### 2026-05-03
 
+- PHASE_03_MAGNET_CORE の最小実装を実施
+- `MagnetResolver` を固定レンジの単発処理から、押された箱を起点にしたキュー型連鎖処理へ更新
+- 直線上の最初の対象だけを探索し、壁または盤面外で探索を停止するようにした
+- `source.strength + target.strength >= distance` による発動判定を追加
+- 向かい合う面の極から引力 / 反発を判定し、対象を 1 マス単位で移動するようにした
+- `processed_sources` により、同じ起点を 1 手で 1 回だけ処理する暫定ルールを実装
+- 連鎖時の処理方向は未確定のため、PHASE_03 では押した方向を引き継ぐ TODO として残した
+
+### 2026-05-03
+
 - PHASE_02_DATA_MODEL を実装
 - `MagneticBodyState.gd` を追加し、`id`、`kind`、`pos`、`facing`、`strength`、`movable` を保持する構造にした
 - `GameState` の主データを `bodies` に置き換え、スナップショットも新構造に対応
