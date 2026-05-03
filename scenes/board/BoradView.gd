@@ -1,6 +1,8 @@
 class_name BoardView
 extends Node2D
 
+const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.gd")
+
 const FALLBACK_BOX_COLOR := Color("d19a66")
 const FALLBACK_BOX_ON_GOAL_COLOR := Color("98c379")
 const FALLBACK_PLAYER_COLOR := Color("61afef")
@@ -53,21 +55,20 @@ func _draw() -> void:
 			if state.walls.has(pos):
 				_draw_wall_cell(rect)
 
-	for i in range(state.boxes.size()):
-		var box_pos := state.boxes[i]
-		var pole := state.box_poles[i]
+	for body in state.bodies:
+		var box_pos := body.pos
 		var box_rect := Rect2(
 			Vector2(box_pos.x * cell_size, box_pos.y * cell_size),
 			Vector2(cell_size, cell_size)
 		)
 
 		if state.goals.has(box_pos):
-			_draw_box_on_goal(box_rect, pole)
+			_draw_box_on_goal(box_rect, body)
 		else:
-			_draw_box(box_rect, pole)
+			_draw_box(box_rect, body)
 
 	var player_rect := Rect2(
-		Vector2(state.player.x * cell_size, state.player.y * cell_size),
+		Vector2(state.player_pos.x * cell_size, state.player_pos.y * cell_size),
 		Vector2(cell_size, cell_size)
 	)
 	_draw_player(player_rect)
@@ -95,16 +96,16 @@ func _draw_wall_cell(rect: Rect2) -> void:
 		draw_rect(rect.grow(-4), FALLBACK_WALL_COLOR)
 
 
-func _draw_box(rect: Rect2, pole: String) -> void:
+func _draw_box(rect: Rect2, body: MagneticBodyStateScript) -> void:
 	if tex_box:
 		draw_texture_rect(tex_box, rect, false)
 	else:
 		draw_rect(rect.grow(-8), FALLBACK_BOX_COLOR)
 
-	_draw_pole_marker(rect, pole)
+	_draw_pole_marker(rect, body)
 
 
-func _draw_box_on_goal(rect: Rect2, pole: String) -> void:
+func _draw_box_on_goal(rect: Rect2, body: MagneticBodyStateScript) -> void:
 	if tex_box_on_goal:
 		draw_texture_rect(tex_box_on_goal, rect, false)
 	elif tex_box:
@@ -112,7 +113,7 @@ func _draw_box_on_goal(rect: Rect2, pole: String) -> void:
 	else:
 		draw_rect(rect.grow(-8), FALLBACK_BOX_ON_GOAL_COLOR)
 
-	_draw_pole_marker(rect, pole)
+	_draw_pole_marker(rect, body)
 
 
 func _draw_player(rect: Rect2) -> void:
@@ -122,7 +123,8 @@ func _draw_player(rect: Rect2) -> void:
 		draw_rect(rect.grow(-12), FALLBACK_PLAYER_COLOR)
 
 
-func _draw_pole_marker(rect: Rect2, pole: String) -> void:
+func _draw_pole_marker(rect: Rect2, body: MagneticBodyStateScript) -> void:
+	var pole := body.get_pole_on_face(body.facing)
 	var color := _get_pole_color(pole)
 
 	var marker_rect := Rect2(
@@ -136,6 +138,6 @@ func _draw_pole_marker(rect: Rect2, pole: String) -> void:
 
 
 func _get_pole_color(pole: String) -> Color:
-	if pole == GameState.POLE_N:
+	if pole == MagneticBodyStateScript.POLE_N:
 		return POLE_N_COLOR
 	return POLE_S_COLOR

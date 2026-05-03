@@ -1,9 +1,13 @@
 class_name LevelLoader
 extends RefCounted
 
+const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.gd")
+const DEFAULT_BOX_STRENGTH := 3
+
 
 func load_from_rows(rows: Array[String]) -> GameState:
 	var state := GameState.new()
+	var next_body_id := 1
 
 	state.board_size = Vector2i(rows[0].length(), rows.size())
 
@@ -19,25 +23,36 @@ func load_from_rows(rows: Array[String]) -> GameState:
 				"G":
 					state.goals[pos] = true
 				"P":
-					state.player = pos
+					state.player_pos = pos
 				"+":
 					state.goals[pos] = true
-					state.player = pos
+					state.player_pos = pos
 				"N":
-					state.boxes.append(pos)
-					state.box_poles.append(GameState.POLE_N)
+					state.bodies.append(_create_box(next_body_id, pos, Vector2i.RIGHT))
+					next_body_id += 1
 				"S":
-					state.boxes.append(pos)
-					state.box_poles.append(GameState.POLE_S)
+					state.bodies.append(_create_box(next_body_id, pos, Vector2i.LEFT))
+					next_body_id += 1
 				"n":
 					state.goals[pos] = true
-					state.boxes.append(pos)
-					state.box_poles.append(GameState.POLE_N)
+					state.bodies.append(_create_box(next_body_id, pos, Vector2i.RIGHT))
+					next_body_id += 1
 				"s":
 					state.goals[pos] = true
-					state.boxes.append(pos)
-					state.box_poles.append(GameState.POLE_S)
+					state.bodies.append(_create_box(next_body_id, pos, Vector2i.LEFT))
+					next_body_id += 1
 				_:
 					pass
 
 	return state
+
+
+func _create_box(body_id: int, pos: Vector2i, facing: Vector2i) -> MagneticBodyStateScript:
+	return MagneticBodyStateScript.new(
+		body_id,
+		MagneticBodyStateScript.KIND_BOX,
+		pos,
+		facing,
+		DEFAULT_BOX_STRENGTH,
+		true
+	)

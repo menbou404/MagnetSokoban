@@ -7,7 +7,7 @@ func is_cleared(state: GameState) -> bool:
 		return false
 
 	for goal_pos in state.goals.keys():
-		if not state.boxes.has(goal_pos as Vector2i):
+		if state.get_body_at(goal_pos as Vector2i) == null:
 			return false
 
 	return true
