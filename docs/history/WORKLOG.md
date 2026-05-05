@@ -17,6 +17,15 @@
 
 ### 2026-05-03
 
+- PHASE_05_GAMEPLAY_CONTENT の最小実装を実施
+- `BoardView` に N/S 面マーカー、向き矢印、強さドットを追加
+- `LevelLoader` に `>` / `<` / `^` / `v` と `1` から `5` の強さ付き右向き箱を追加
+- `Main.gd` に 5 つの確認面を追加し、N / B キーで次 / 前の面へ切り替えられるようにした
+- 確認面は、基本移動と箱押し、引力、反発、連鎖、強さ差優先、同強度同時処理、向き表示を確認する構成にした
+- `godot` / `godot4` コマンドが見つからないため、実起動確認は未実施
+
+### 2026-05-03
+
 - PHASE_04_CONFLICT_RESOLUTION の最小実装を実施
 - `MagnetResolver` に `MagneticInteractionCandidate` 相当の候補生成を追加
 - `PlannedMove` 相当の移動計画と `apply_planned_moves()` による一括適用を追加

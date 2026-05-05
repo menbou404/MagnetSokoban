@@ -17,6 +17,22 @@
 
 #### 内容
 
+PHASE_05_GAMEPLAY_CONTENT として、最小プレイセットを整備した。
+`BoardView` に箱の向き、N/S 面、強さドットの表示を追加し、`LevelLoader` に上下左右向きと強さ違いの箱記号を追加した。
+`Main.gd` は 5 つの確認面を持つようにし、N / B キーで面を切り替えられるようにした。
+
+#### 理由
+
+PHASE_02 から PHASE_04 までで整備したデータ構造、磁力連鎖、競合解決を、実際に確認しながら遊べる最小状態にするため。
+
+#### 次
+
+Godot エディタ上で実プレイ確認を行い、必要なら本番用レベルデータ形式や次の追加ギミック候補を決める。
+
+### 2026-05-03
+
+#### 内容
+
 PHASE_04_CONFLICT_RESOLUTION として、磁力作用の競合解決を `MagnetResolver` に実装した。
 `MagneticInteractionCandidate` 相当の Dictionary と `PlannedMove` 相当の Dictionary を導入し、強さが異なる場合は `strength` の強い側の作用を逐次適用し、同強度の場合は両者の次の 1 マス移動候補を一括適用する。
 

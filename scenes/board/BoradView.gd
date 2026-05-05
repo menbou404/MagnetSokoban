@@ -13,6 +13,9 @@ const FALLBACK_GOAL_COLOR := Color("f2c94c")
 
 const POLE_N_COLOR := Color(0.95, 0.35, 0.35, 0.95)
 const POLE_S_COLOR := Color(0.35, 0.55, 1.0, 0.95)
+const FACING_ARROW_COLOR := Color(1.0, 1.0, 1.0, 0.9)
+const STRENGTH_DOT_COLOR := Color(0.1, 0.12, 0.16, 0.9)
+const STRENGTH_DOT_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.75)
 
 @export var cell_size := 64
 
@@ -124,17 +127,69 @@ func _draw_player(rect: Rect2) -> void:
 
 
 func _draw_pole_marker(rect: Rect2, body: MagneticBodyStateScript) -> void:
-	var pole := body.get_pole_on_face(body.facing)
-	var color := _get_pole_color(pole)
+	for face_direction in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+		var pole := body.get_pole_on_face(face_direction)
+		if pole == "":
+			continue
 
-	var marker_rect := Rect2(
-		rect.position + Vector2(10, 8),
-		Vector2(rect.size.x - 20, 12)
-	)
+		_draw_face_pole_marker(rect, face_direction, _get_pole_color(pole))
+
+	_draw_facing_arrow(rect, body.facing)
+	_draw_strength_marker(rect, body.strength)
+
+
+func _draw_face_pole_marker(rect: Rect2, face_direction: Vector2i, color: Color) -> void:
+	var marker_thickness: float = maxf(5.0, rect.size.x * 0.1)
+	var inset: float = rect.size.x * 0.2
+	var marker_rect := Rect2()
+
+	if face_direction == Vector2i.LEFT:
+		marker_rect = Rect2(
+			rect.position + Vector2(6, inset),
+			Vector2(marker_thickness, rect.size.y - inset * 2.0)
+		)
+	elif face_direction == Vector2i.RIGHT:
+		marker_rect = Rect2(
+			rect.position + Vector2(rect.size.x - marker_thickness - 6, inset),
+			Vector2(marker_thickness, rect.size.y - inset * 2.0)
+		)
+	elif face_direction == Vector2i.UP:
+		marker_rect = Rect2(
+			rect.position + Vector2(inset, 6),
+			Vector2(rect.size.x - inset * 2.0, marker_thickness)
+		)
+	elif face_direction == Vector2i.DOWN:
+		marker_rect = Rect2(
+			rect.position + Vector2(inset, rect.size.y - marker_thickness - 6),
+			Vector2(rect.size.x - inset * 2.0, marker_thickness)
+		)
+
 	draw_rect(marker_rect, color)
+	draw_rect(marker_rect.grow(-1), color.lightened(0.12))
 
-	var inner_rect := marker_rect.grow(-2)
-	draw_rect(inner_rect, color.lightened(0.15))
+
+func _draw_facing_arrow(rect: Rect2, facing: Vector2i) -> void:
+	if facing == Vector2i.ZERO:
+		return
+
+	var center := rect.get_center()
+	var facing_vector := Vector2(facing.x, facing.y)
+	var tip := center + facing_vector * (rect.size.x * 0.28)
+	var tail := center - facing_vector * (rect.size.x * 0.12)
+	draw_line(tail, tip, FACING_ARROW_COLOR, 4.0)
+	draw_circle(tip, 4.5, FACING_ARROW_COLOR)
+
+
+func _draw_strength_marker(rect: Rect2, strength: int) -> void:
+	var visible_count: int = clamp(strength, 1, 5)
+	var radius: float = maxf(2.5, rect.size.x * 0.045)
+	var spacing: float = radius * 2.5
+	var start := rect.position + Vector2(12, rect.size.y - 11)
+
+	for index in range(visible_count):
+		var center := start + Vector2(index * spacing, 0)
+		draw_circle(center, radius + 1.0, STRENGTH_DOT_OUTLINE_COLOR)
+		draw_circle(center, radius, STRENGTH_DOT_COLOR)
 
 
 func _get_pole_color(pole: String) -> Color:
