@@ -39,7 +39,7 @@ Codex がどのファイルから触るべきかを迷わないようにする�
 10. `docs/レベル運用方針.md`
 11. `docs/レベルデータ形式.md`
 12. `docs/テストレベル設計.md`
-13. `docs/回路確認方針.md`
+13. `docs/回帰確認方針.md`
 14. 対象フェーズ文書
 
 ### Step 1
@@ -407,7 +407,7 @@ PHASE_08_RULE_REGRESSION_TESTS では、新ギミック追加前に既存ルー�
 対象:
 
 - `docs/テストレベル設計.md`
-- `docs/回路確認方針.md`
+- `docs/回帰確認方針.md`
 - `docs/milestones/PHASE_08_RULE_REGRESSION_TESTS.md`
 
 目的:

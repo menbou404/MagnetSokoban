@@ -1,0 +1,14 @@
+{
+  "id": "system_reload_01",
+  "name": "09 System Reload",
+  "purpose": "next, previous, and reload keep using external level files",
+  "description": "N/B で前後の確認面へ切り替え、外部ファイルから再読込されることを確認する。",
+  "tags": ["reload", "level_switch", "system"],
+  "rows": [
+    "########",
+    "#......#",
+    "#.P>G..#",
+    "#......#",
+    "########"
+  ]
+}

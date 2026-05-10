@@ -1,0 +1,14 @@
+{
+  "id": "rule_chain_01",
+  "name": "04 Rule Chain",
+  "purpose": "magnet chain from moved body to next source",
+  "description": "磁力で動いた箱が次の起点になり、連鎖が順に進むことを確認する。",
+  "tags": ["chain", "magnet"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P4...4<G.#",
+    "#..........#",
+    "############"
+  ]
+}

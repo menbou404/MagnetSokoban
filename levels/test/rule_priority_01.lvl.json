@@ -1,0 +1,14 @@
+{
+  "id": "rule_priority_01",
+  "name": "05 Rule Priority",
+  "purpose": "stronger magnet side has priority",
+  "description": "起点と対象の強さが異なるとき、強い側の作用が優先されることを確認する。",
+  "tags": ["priority", "strength", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P2..G>..#",
+    "#.........#",
+    "###########"
+  ]
+}

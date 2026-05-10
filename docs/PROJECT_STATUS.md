@@ -23,7 +23,7 @@
 - `レベル運用方針.md` の作成
 - `レベルデータ形式.md` の作成
 - `テストレベル設計.md` の作成
-- `回路確認方針.md` の作成
+- `回帰確認方針.md` の作成
 - `AGENTS.md` の整備
 - フェーズ別マイルストーン運用の導入
 - `docs` 配下への文書集約設計
@@ -50,28 +50,30 @@
 - 既存確認面 5 つの `levels/test/` 外部化
 - `levels/level_catalog.json` による確認用レベル順序管理
 - `LevelLoader.gd` の外部 JSON / catalog 読込対応
+- PHASE_08_RULE_REGRESSION_TESTS の最小実装
+- `levels/test/` の回帰確認用 11 面セット整備
+- 各確認面の `id`、`name`、`description`、`tags` 整備
+- 回帰確認向け `levels/level_catalog.json` の順序整理
 
 ### 現在地
 
-仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE の最小実装は完了。
+仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS の最小実装は完了。
 箱は `MagneticBodyState` により、位置・向き・強さ・可動性を持つ磁力物体として保持されている。  
 箱を押した直後にだけ、押された箱を起点として直線探索、距離判定、引力 / 反発、連鎖処理を行う。
 競合解決では、強さが異なる場合に強い側を優先し、同強度の場合は両者を 1 マスずつ同時に動かす。
 1 手の結果は `TurnResult` / `ActionEvent` のイベント列として生成され、`AnimationDirector` が `BoardView` の表示専用状態を使って phase 順に再生する。
 再生中は新しい入力を受け付けない。
-確認用レベル 5 つは `levels/test/` の `.lvl.json` として外部化され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
+確認用レベルは `levels/test/` の `.lvl.json` として 11 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
-次は PHASE_08_RULE_REGRESSION_TESTS として、既存ルールを目的別に確認できる `levels/test/` の確認面群と回帰確認手順を整備する段階である。
+次は Godot エディタ上で回帰確認面を実プレイ確認し、その後 PHASE_09_ROTATION_GIMMICK などの追加ギミックに進む段階である。
 
 ## いま進める対象
 
 ### 直近の最優先
 
-1. `テストレベル設計.md` の推奨最小セットに合わせて `levels/test/` を整理する
-2. 各確認面の `id`、`name`、`description`、`tags` を目的別に整える
-3. `levels/level_catalog.json` の確認順を回帰確認向けに整える
-4. 基本押し、引力、反発、連鎖、強さ優先、同強度同時処理、Undo、Reset、レベル再読込、アニメーション中入力停止を確認できる状態にする
-5. Godot エディタ上で確認面群を実プレイ確認する
+1. Godot エディタ上で 11 面の回帰確認セットを実プレイ確認する
+2. 新ギミック追加前後に `levels/test/` の確認面を一通り確認する運用を定着させる
+3. 次フェーズとして PHASE_09_ROTATION_GIMMICK または固定磁石 / 遮断系の優先順位を決める
 
 ### 直近で触らないもの
 
@@ -101,7 +103,7 @@
 
 ## 次に完了させるべき状態
 
-PHASE_08 の最小実装では以下を満たす。
+PHASE_08 の最小実装はコード上では以下を満たす。
 
 1. 主要仕様に対応する確認面がある
 2. 各確認面の目的が明確である
@@ -111,3 +113,5 @@ PHASE_08 の最小実装では以下を満たす。
 6. 確認面が `levels/test/` で整理されている
 7. 新ギミック追加前後の回帰確認に使える
 8. 既存プレイフローを壊していない
+
+残る確認は、Godot エディタ上で 11 面を実プレイして意図通り見えることを確認すること。

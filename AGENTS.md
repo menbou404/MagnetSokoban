@@ -21,7 +21,7 @@
 9. `docs/レベル運用方針.md`
 10. `docs/レベルデータ形式.md`
 11. `docs/テストレベル設計.md`
-12. `docs/回路確認方針.md`
+12. `docs/回帰確認方針.md`
 13. `docs/README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて以下も読むこと。

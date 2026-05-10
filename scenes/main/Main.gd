@@ -122,8 +122,11 @@ func _load_previous_level() -> void:
 func _print_level_status(entry: Dictionary) -> void:
 	var level_name := entry.get("name", entry.get("id", "")) as String
 	var purpose := entry.get("purpose", "") as String
+	var description := entry.get("description", "") as String
 	print("LEVEL %d/%d: %s" % [level_index + 1, level_entries.size(), level_name])
 	print("Purpose: %s" % purpose)
+	if description != "":
+		print("Description: %s" % description)
 	print("Controls: arrows/WASD move, Z undo, R reset, N next, B previous.")
 
 

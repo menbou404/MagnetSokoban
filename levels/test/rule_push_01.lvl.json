@@ -1,0 +1,14 @@
+{
+  "id": "rule_push_01",
+  "name": "01 Rule Push",
+  "purpose": "basic move, box push, wall blocking, goal clear",
+  "description": "基本移動、箱押し、壁で止まること、ゴール判定を短く確認する。",
+  "tags": ["push", "wall", "goal"],
+  "rows": [
+    "########",
+    "#......#",
+    "#.P>G..#",
+    "#......#",
+    "########"
+  ]
+}

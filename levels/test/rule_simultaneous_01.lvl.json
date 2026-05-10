@@ -1,0 +1,14 @@
+{
+  "id": "rule_simultaneous_01",
+  "name": "06 Rule Simultaneous",
+  "purpose": "equal strength magnets move simultaneously",
+  "description": "同強度の磁力作用で、両方の箱が同時に 1 マスずつ動くことを確認する。",
+  "tags": ["simultaneous", "strength", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>..G>..#",
+    "#.........#",
+    "###########"
+  ]
+}

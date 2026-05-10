@@ -152,6 +152,8 @@ func load_level_entry(entry: Dictionary) -> Dictionary:
 	level_data["id"] = level_data.get("id", entry.get("id", ""))
 	level_data["name"] = level_data.get("name", entry.get("name", ""))
 	level_data["purpose"] = level_data.get("purpose", entry.get("purpose", ""))
+	level_data["description"] = level_data.get("description", entry.get("description", ""))
+	level_data["tags"] = level_data.get("tags", entry.get("tags", []))
 	level_data["group"] = entry.get("group", level_data.get("group", ""))
 	return level_data
 
@@ -220,4 +222,6 @@ func _normalize_catalog_entry(entry: Dictionary) -> Dictionary:
 		"group": entry.get("group", ""),
 		"path": entry.get("path", ""),
 		"purpose": entry.get("purpose", ""),
+		"description": entry.get("description", ""),
+		"tags": entry.get("tags", []),
 	}

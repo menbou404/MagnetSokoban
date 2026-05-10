@@ -1,0 +1,14 @@
+{
+  "id": "rule_attract_01",
+  "name": "02 Rule Attract",
+  "purpose": "basic attraction after pushing a stronger source magnet",
+  "description": "押された箱を起点に、異なる極の対象が 1 マス近づくことを確認する。",
+  "tags": ["attract", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P4..G>..#",
+    "#.........#",
+    "###########"
+  ]
+}

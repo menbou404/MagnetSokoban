@@ -17,9 +17,26 @@
 
 #### 内容
 
+PHASE_08_RULE_REGRESSION_TESTS の最小実装として、`levels/test/` を回帰確認向けの 11 面セットへ整理した。
+
+推奨確認面 `rule_push_01`、`rule_attract_01`、`rule_repel_01`、`rule_chain_01`、`rule_priority_01`、`rule_simultaneous_01`、`system_undo_01`、`system_reset_01`、`system_reload_01`、`view_animation_lock_01`、`view_chain_readability_01` を追加し、各面に `description` と `tags` を持たせた。
+`levels/level_catalog.json` も回帰確認順に更新し、`LevelLoader.gd` と `Main.gd` は `description` / `tags` を保持できるように最小調整した。
+
+#### 理由
+
+新ギミック追加前後に、既存の押し、磁力、連鎖、競合解決、システム操作、アニメーション可読性が壊れていないことを継続確認できるようにするため。
+
+#### 次
+
+Godot エディタ上で 11 面を実プレイ確認し、その後 PHASE_09_ROTATION_GIMMICK などの追加ギミックへ進む。
+
+### 2026-05-11
+
+#### 内容
+
 PHASE_08_RULE_REGRESSION_TESTS の設計文書を正式な文書構成に組み込んだ。
 
-`テストレベル設計.md`、`回路確認方針.md`、`PHASE_08_RULE_REGRESSION_TESTS.md` を読む順と実装順に追加し、`PROJECT_STATUS.md` を PHASE_08 開始前の現在地へ更新した。
+`テストレベル設計.md`、`回帰確認方針.md`、`PHASE_08_RULE_REGRESSION_TESTS.md` を読む順と実装順に追加し、`PROJECT_STATUS.md` を PHASE_08 開始前の現在地へ更新した。
 
 #### 理由
 

@@ -1,0 +1,14 @@
+{
+  "id": "system_reset_01",
+  "name": "08 System Reset",
+  "purpose": "reset reloads the current level from file",
+  "description": "移動後に Reset して、外部レベルファイルの初期状態へ戻ることを確認する。",
+  "tags": ["reset", "reload", "system"],
+  "rows": [
+    "###########",
+    "#...^.....#",
+    "#.P>..G<..#",
+    "#...v.....#",
+    "###########"
+  ]
+}

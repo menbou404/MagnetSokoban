@@ -1,0 +1,14 @@
+{
+  "id": "view_animation_lock_01",
+  "name": "10 View Animation Lock",
+  "purpose": "input is ignored while one turn animation is playing",
+  "description": "磁力イベント再生中に次入力が入らず、再生完了後に次の入力を受け付けることを確認する。",
+  "tags": ["animation", "input_lock", "view"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P>..G>...#",
+    "#..........#",
+    "############"
+  ]
+}

@@ -17,14 +17,26 @@
 
 ### 2026-05-11
 
+- PHASE_08_RULE_REGRESSION_TESTS の最小実装を実施
+- `levels/test/` を推奨確認面 11 面へ整理
+- `basic_*` 系の既存確認面を `rule_*` / `system_*` / `view_*` の回帰確認向け命名へ置き換え
+- 各 `.lvl.json` に `description` と `tags` を追加し、確認目的を明確化
+- `levels/level_catalog.json` を回帰確認順へ更新
+- `LevelLoader.gd` が `description` / `tags` を catalog entry と level file から保持できるようにした
+- `Main.gd` のレベル表示に description を追加
+- `docs/回路確認方針.md` を指定名に合わせて `docs/回帰確認方針.md` へ改名し、参照を更新
+- Godot 4.6.2 のヘッドレス起動確認、全 catalog entry 読込、次 / 前 / リセット、主要ルールイベントのスモーク確認を実施
+
+### 2026-05-11
+
 - PHASE_08_RULE_REGRESSION_TESTS の追加に合わせて文書構成を更新
-- `AGENTS.md` と `docs/README.md` の読む順に `テストレベル設計.md` と `回路確認方針.md` を追加
+- `AGENTS.md` と `docs/README.md` の読む順に `テストレベル設計.md` と `回帰確認方針.md` を追加
 - `PROJECT_STATUS.md` を PHASE_08 の着手前状態へ更新
 - `README_IMPLEMENTATION_ORDER.md` に PHASE_08 用の実装順を追加
 - `SPEC.md` に回帰確認方針を追記
 - `レベルデータ形式.md` に `description` と `tags` の扱いを追記
 - `データ構造.md` と `用語集.md` に回帰確認用の項目と用語を追記
-- `PHASE_08_RULE_REGRESSION_TESTS.md`、`テストレベル設計.md`、`回路確認方針.md` に関連文書を追記
+- `PHASE_08_RULE_REGRESSION_TESTS.md`、`テストレベル設計.md`、`回帰確認方針.md` に関連文書を追記
 
 ### 2026-05-11
 

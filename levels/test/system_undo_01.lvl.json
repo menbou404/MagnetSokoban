@@ -1,0 +1,14 @@
+{
+  "id": "system_undo_01",
+  "name": "07 System Undo",
+  "purpose": "undo restores positions, facing, strength, and move count",
+  "description": "移動や磁力処理後に Undo して、初期配置と向きと強さへ戻ることを確認する。",
+  "tags": ["undo", "system"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P4...4<G.#",
+    "#..........#",
+    "############"
+  ]
+}

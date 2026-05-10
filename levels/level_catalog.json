@@ -2,39 +2,103 @@
   "default_group": "test",
   "levels": [
     {
-      "id": "basic_push_01",
-      "name": "01 Basic Push",
+      "id": "rule_push_01",
+      "name": "01 Rule Push",
       "group": "test",
-      "path": "res://levels/test/basic_push_01.lvl.json",
-      "purpose": "basic move, box push, clear, undo, reset"
+      "path": "res://levels/test/rule_push_01.lvl.json",
+      "purpose": "basic move, box push, wall blocking, goal clear",
+      "description": "基本移動、箱押し、壁で止まること、ゴール判定を短く確認する。",
+      "tags": ["push", "wall", "goal"]
     },
     {
-      "id": "basic_attract_01",
-      "name": "02 Attraction",
+      "id": "rule_attract_01",
+      "name": "02 Rule Attract",
       "group": "test",
-      "path": "res://levels/test/basic_attract_01.lvl.json",
-      "purpose": "equal strength attraction and simultaneous one-step movement"
+      "path": "res://levels/test/rule_attract_01.lvl.json",
+      "purpose": "basic attraction after pushing a stronger source magnet",
+      "description": "押された箱を起点に、異なる極の対象が 1 マス近づくことを確認する。",
+      "tags": ["attract", "magnet"]
     },
     {
-      "id": "basic_repel_01",
-      "name": "03 Repulsion",
+      "id": "rule_repel_01",
+      "name": "03 Rule Repel",
       "group": "test",
-      "path": "res://levels/test/basic_repel_01.lvl.json",
-      "purpose": "repulsion and stronger source priority"
+      "path": "res://levels/test/rule_repel_01.lvl.json",
+      "purpose": "basic repulsion after pushing a stronger source magnet",
+      "description": "押された箱を起点に、同じ極の対象が 1 マス遠ざかることを確認する。",
+      "tags": ["repel", "magnet"]
     },
     {
-      "id": "chain_01",
-      "name": "04 Chain",
+      "id": "rule_chain_01",
+      "name": "04 Rule Chain",
       "group": "test",
-      "path": "res://levels/test/chain_01.lvl.json",
-      "purpose": "magnet chain from moved body to next target"
+      "path": "res://levels/test/rule_chain_01.lvl.json",
+      "purpose": "magnet chain from moved body to next source",
+      "description": "磁力で動いた箱が次の起点になり、連鎖が順に進むことを確認する。",
+      "tags": ["chain", "magnet"]
     },
     {
-      "id": "direction_check_01",
-      "name": "05 Direction Check",
+      "id": "rule_priority_01",
+      "name": "05 Rule Priority",
       "group": "test",
-      "path": "res://levels/test/direction_check_01.lvl.json",
-      "purpose": "up/down/left/right facing markers and strength display"
+      "path": "res://levels/test/rule_priority_01.lvl.json",
+      "purpose": "stronger magnet side has priority",
+      "description": "起点と対象の強さが異なるとき、強い側の作用が優先されることを確認する。",
+      "tags": ["priority", "strength", "magnet"]
+    },
+    {
+      "id": "rule_simultaneous_01",
+      "name": "06 Rule Simultaneous",
+      "group": "test",
+      "path": "res://levels/test/rule_simultaneous_01.lvl.json",
+      "purpose": "equal strength magnets move simultaneously",
+      "description": "同強度の磁力作用で、両方の箱が同時に 1 マスずつ動くことを確認する。",
+      "tags": ["simultaneous", "strength", "magnet"]
+    },
+    {
+      "id": "system_undo_01",
+      "name": "07 System Undo",
+      "group": "test",
+      "path": "res://levels/test/system_undo_01.lvl.json",
+      "purpose": "undo restores positions, facing, strength, and move count",
+      "description": "移動や磁力処理後に Undo して、初期配置と向きと強さへ戻ることを確認する。",
+      "tags": ["undo", "system"]
+    },
+    {
+      "id": "system_reset_01",
+      "name": "08 System Reset",
+      "group": "test",
+      "path": "res://levels/test/system_reset_01.lvl.json",
+      "purpose": "reset reloads the current level from file",
+      "description": "移動後に Reset して、外部レベルファイルの初期状態へ戻ることを確認する。",
+      "tags": ["reset", "reload", "system"]
+    },
+    {
+      "id": "system_reload_01",
+      "name": "09 System Reload",
+      "group": "test",
+      "path": "res://levels/test/system_reload_01.lvl.json",
+      "purpose": "next, previous, and reload keep using external level files",
+      "description": "N/B で前後の確認面へ切り替え、外部ファイルから再読込されることを確認する。",
+      "tags": ["reload", "level_switch", "system"]
+    },
+    {
+      "id": "view_animation_lock_01",
+      "name": "10 View Animation Lock",
+      "group": "test",
+      "path": "res://levels/test/view_animation_lock_01.lvl.json",
+      "purpose": "input is ignored while one turn animation is playing",
+      "description": "磁力イベント再生中に次入力が入らず、再生完了後に次の入力を受け付けることを確認する。",
+      "tags": ["animation", "input_lock", "view"]
+    },
+    {
+      "id": "view_chain_readability_01",
+      "name": "11 View Chain Readability",
+      "group": "test",
+      "path": "res://levels/test/view_chain_readability_01.lvl.json",
+      "purpose": "chain order and trigger faces are readable",
+      "description": "磁力発動面、箱移動、次の起点への連鎖順が追えることを確認する。",
+      "tags": ["animation", "readability", "chain", "view"]
     }
   ]
 }
