@@ -19,7 +19,8 @@
 7. `docs/イベントモデル.md`
 8. `docs/アニメーション方針.md`
 9. `docs/レベル運用方針.md`
-10. `docs/README_IMPLEMENTATION_ORDER.md`
+10. `docs/レベルデータ形式.md`
+11. `docs/README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて以下も読むこと。
 

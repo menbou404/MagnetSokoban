@@ -17,6 +17,17 @@
 
 ### 2026-05-11
 
+- PHASE_07_LEVEL_PIPELINE の最小実装を実施
+- `docs/レベルデータ形式.md` を追加し、`.lvl.json` と `level_catalog.json` の最小形式を文書化
+- 既存確認面 5 つを `levels/test/` の `.lvl.json` へ外部化
+- `levels/level_catalog.json` を追加し、確認用レベルの順序とメタ情報を管理するようにした
+- `levels/play/.gitkeep` を追加し、今後のプレイ用レベル配置場所を用意
+- `LevelLoader.gd` にレベルファイル、カタログ、カタログ entry からの読込経路を追加
+- `Main.gd` から面データ直書きを撤去し、現在インデックスと catalog entry だけでレベル切替 / リセットするようにした
+- Godot 4.6.2 のヘッドレス起動確認と、全 catalog entry 読込、次 / 前 / リセットのスモーク確認を実施
+
+### 2026-05-11
+
 - PHASE_07_LEVEL_PIPELINE の追加に合わせて文書構成を更新
 - `AGENTS.md` と `docs/README.md` の読む順に `レベル運用方針.md` を追加
 - `PROJECT_STATUS.md` を PHASE_07 の着手前状態へ更新

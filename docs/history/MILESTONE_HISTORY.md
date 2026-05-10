@@ -17,6 +17,24 @@
 
 #### 内容
 
+PHASE_07_LEVEL_PIPELINE の最小実装として、既存確認面 5 つを `Main.gd` から `levels/test/` の `.lvl.json` へ外部化した。
+
+`levels/level_catalog.json` を追加し、確認用レベルの順序、分類、表示名、ファイルパスを管理するようにした。
+`LevelLoader.gd` はレベルファイル、カタログ、カタログ entry からの `GameState` 生成に対応し、`Main.gd` は現在のレベルインデックスと catalog entry だけを扱うようにした。
+
+#### 理由
+
+レベル追加や並べ替えのために `Main.gd` を編集する状態を解消し、確認用レベルとプレイ用レベルを `levels/` 配下で管理できるようにするため。
+
+#### 次
+
+Godot エディタ上で外部化後の確認面を実プレイ確認する。
+新しい確認面を追加する場合は、`levels/test/` に `.lvl.json` を追加し、`levels/level_catalog.json` に entry を追加する。
+
+### 2026-05-11
+
+#### 内容
+
 PHASE_07_LEVEL_PIPELINE の設計文書を正式な文書構成に組み込んだ。
 
 `レベル運用方針.md` と `PHASE_07_LEVEL_PIPELINE.md` を読む順と実装順に追加し、`PROJECT_STATUS.md` を PHASE_07 開始前の現在地へ更新した。

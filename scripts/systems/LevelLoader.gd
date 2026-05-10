@@ -3,6 +3,7 @@ extends RefCounted
 
 const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.gd")
 const DEFAULT_BOX_STRENGTH := 3
+const DEFAULT_CATALOG_PATH := "res://levels/level_catalog.json"
 
 
 func load_from_rows(rows: Array[String]) -> GameState:
@@ -62,6 +63,123 @@ func load_from_rows(rows: Array[String]) -> GameState:
 	return state
 
 
+func load_level_file(path: String) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_error("Failed to open level file: %s" % path)
+		return {}
+
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("Invalid level file JSON: %s" % path)
+		return {}
+
+	var level_data := parsed as Dictionary
+	if not level_data.has("rows"):
+		push_error("Level file has no rows: %s" % path)
+		return {}
+
+	level_data["path"] = path
+	return level_data
+
+
+func load_state_from_file(path: String) -> GameState:
+	var level_data := load_level_file(path)
+	if level_data.is_empty():
+		return null
+
+	return load_from_rows(_rows_from_level_data(level_data))
+
+
+func load_catalog(path: String = DEFAULT_CATALOG_PATH) -> Dictionary:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		push_error("Failed to open level catalog: %s" % path)
+		return {
+			"default_group": "test",
+			"levels": [],
+		}
+
+	var parsed = JSON.parse_string(file.get_as_text())
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("Invalid level catalog JSON: %s" % path)
+		return {
+			"default_group": "test",
+			"levels": [],
+		}
+
+	var catalog := parsed as Dictionary
+	if not catalog.has("levels"):
+		catalog["levels"] = []
+	if not catalog.has("default_group"):
+		catalog["default_group"] = "test"
+
+	return catalog
+
+
+func get_level_entries(group: String = "", catalog_path: String = DEFAULT_CATALOG_PATH) -> Array[Dictionary]:
+	var catalog := load_catalog(catalog_path)
+	var selected_group := group
+	if selected_group == "":
+		selected_group = catalog.get("default_group", "test") as String
+
+	var entries: Array[Dictionary] = []
+	var source_entries := catalog.get("levels", []) as Array
+
+	for source_entry in source_entries:
+		var entry := source_entry as Dictionary
+		if entry.is_empty():
+			continue
+
+		var entry_group := entry.get("group", "") as String
+		if selected_group != "" and entry_group != selected_group:
+			continue
+
+		entries.append(_normalize_catalog_entry(entry))
+
+	return entries
+
+
+func load_level_entry(entry: Dictionary) -> Dictionary:
+	if not entry.has("path"):
+		push_error("Level entry has no path: %s" % str(entry))
+		return {}
+
+	var level_data := load_level_file(entry["path"] as String)
+	if level_data.is_empty():
+		return {}
+
+	level_data["id"] = level_data.get("id", entry.get("id", ""))
+	level_data["name"] = level_data.get("name", entry.get("name", ""))
+	level_data["purpose"] = level_data.get("purpose", entry.get("purpose", ""))
+	level_data["group"] = entry.get("group", level_data.get("group", ""))
+	return level_data
+
+
+func load_state_from_entry(entry: Dictionary) -> GameState:
+	var level_data := load_level_entry(entry)
+	if level_data.is_empty():
+		return null
+
+	return load_from_rows(_rows_from_level_data(level_data))
+
+
+func load_level_by_id(
+	level_id: String,
+	catalog_path: String = DEFAULT_CATALOG_PATH
+) -> Dictionary:
+	var catalog := load_catalog(catalog_path)
+	var source_entries := catalog.get("levels", []) as Array
+
+	for source_entry in source_entries:
+		var entry := _normalize_catalog_entry(source_entry as Dictionary)
+		if entry.get("id", "") == level_id:
+			return load_level_entry(entry)
+
+	push_error("Level id not found: %s" % level_id)
+	return {}
+
+
 func _create_box(
 	body_id: int,
 	pos: Vector2i,
@@ -83,3 +201,23 @@ func _get_max_row_width(rows: Array[String]) -> int:
 	for row in rows:
 		width = max(width, row.length())
 	return width
+
+
+func _rows_from_level_data(level_data: Dictionary) -> Array[String]:
+	var rows: Array[String] = []
+	var source_rows := level_data.get("rows", []) as Array
+
+	for row in source_rows:
+		rows.append(row as String)
+
+	return rows
+
+
+func _normalize_catalog_entry(entry: Dictionary) -> Dictionary:
+	return {
+		"id": entry.get("id", ""),
+		"name": entry.get("name", entry.get("id", "")),
+		"group": entry.get("group", ""),
+		"path": entry.get("path", ""),
+		"purpose": entry.get("purpose", ""),
+	}

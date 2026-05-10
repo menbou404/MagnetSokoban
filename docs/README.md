@@ -14,7 +14,8 @@
 6. `イベントモデル.md`
 7. `アニメーション方針.md`
 8. `レベル運用方針.md`
-9. `README_IMPLEMENTATION_ORDER.md`
+9. `レベルデータ形式.md`
+10. `README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて読むもの:
 
@@ -56,6 +57,10 @@
 ### `レベル運用方針.md`
 
 レベルデータの配置場所、確認用 / プレイ用レベルの分類、`LevelLoader` を入口にする方針を定義する。
+
+### `レベルデータ形式.md`
+
+PHASE_07 で使う `.lvl.json` と `level_catalog.json` の最小形式を定義する。
 
 ### `README_IMPLEMENTATION_ORDER.md`
 

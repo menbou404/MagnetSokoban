@@ -1,0 +1,40 @@
+{
+  "default_group": "test",
+  "levels": [
+    {
+      "id": "basic_push_01",
+      "name": "01 Basic Push",
+      "group": "test",
+      "path": "res://levels/test/basic_push_01.lvl.json",
+      "purpose": "basic move, box push, clear, undo, reset"
+    },
+    {
+      "id": "basic_attract_01",
+      "name": "02 Attraction",
+      "group": "test",
+      "path": "res://levels/test/basic_attract_01.lvl.json",
+      "purpose": "equal strength attraction and simultaneous one-step movement"
+    },
+    {
+      "id": "basic_repel_01",
+      "name": "03 Repulsion",
+      "group": "test",
+      "path": "res://levels/test/basic_repel_01.lvl.json",
+      "purpose": "repulsion and stronger source priority"
+    },
+    {
+      "id": "chain_01",
+      "name": "04 Chain",
+      "group": "test",
+      "path": "res://levels/test/chain_01.lvl.json",
+      "purpose": "magnet chain from moved body to next target"
+    },
+    {
+      "id": "direction_check_01",
+      "name": "05 Direction Check",
+      "group": "test",
+      "path": "res://levels/test/direction_check_01.lvl.json",
+      "purpose": "up/down/left/right facing markers and strength display"
+    }
+  ]
+}

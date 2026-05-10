@@ -1,0 +1,12 @@
+{
+  "id": "basic_attract_01",
+  "name": "02 Attraction",
+  "purpose": "equal strength attraction and simultaneous one-step movement",
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>..G>..#",
+    "#.........#",
+    "###########"
+  ]
+}

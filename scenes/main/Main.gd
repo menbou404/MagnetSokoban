@@ -2,66 +2,8 @@ extends Node2D
 
 const AnimationDirectorScript := preload("res://scripts/systems/AnimationDirector.gd")
 
-var levels: Array[Dictionary] = [
-	{
-		"name": "01 Basic Push",
-		"purpose": "basic move, box push, clear, undo, reset",
-		"rows": [
-			"########",
-			"#......#",
-			"#.P>G..#",
-			"#......#",
-			"########",
-		],
-	},
-	{
-		"name": "02 Attraction",
-		"purpose": "equal strength attraction and simultaneous one-step movement",
-		"rows": [
-			"###########",
-			"#.........#",
-			"#.P>..G>..#",
-			"#.........#",
-			"###########",
-		],
-	},
-	{
-		"name": "03 Repulsion",
-		"purpose": "repulsion and stronger source priority",
-		"rows": [
-			"###########",
-			"#.........#",
-			"#.P4.<G...#",
-			"#.........#",
-			"###########",
-		],
-	},
-	{
-		"name": "04 Chain",
-		"purpose": "magnet chain from moved body to next target",
-		"rows": [
-			"############",
-			"#..........#",
-			"#.P4...4<G.#",
-			"#..........#",
-			"############",
-		],
-	},
-	{
-		"name": "05 Direction Check",
-		"purpose": "up/down/left/right facing markers and strength display",
-		"rows": [
-			"###########",
-			"#...^.....#",
-			"#.P>..G<..#",
-			"#...v.....#",
-			"###########",
-		],
-	},
-]
-
 var level_index := 0
-var original_level_rows: Array[String] = []
+var level_entries: Array[Dictionary] = []
 
 @onready var board_view: BoardView = $BoardView
 
@@ -77,6 +19,7 @@ var is_animating := false
 
 func _ready() -> void:
 	move_resolver = MoveResolver.new(magnet_resolver, win_checker, undo_history)
+	level_entries = level_loader.get_level_entries("test")
 	_load_current_level()
 
 
@@ -102,14 +45,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		_load_previous_level()
 
 
-func _load_level(rows: Array[String]) -> void:
+func _load_level(entry: Dictionary) -> void:
 	undo_history.clear()
-	game_state = level_loader.load_from_rows(rows)
+	game_state = level_loader.load_state_from_entry(entry)
+	if game_state == null:
+		push_error("Failed to load level: %s" % str(entry))
+		return
+
 	game_state.cleared = win_checker.is_cleared(game_state)
 
 	_resize_window()
 	board_view.set_state(game_state)
-	_print_level_status()
+	_print_level_status(entry)
 
 
 func _resize_window() -> void:
@@ -144,36 +91,38 @@ func _undo() -> void:
 
 
 func _reset_level() -> void:
-	_load_level(original_level_rows)
+	_load_current_level()
 
 
 func _load_current_level() -> void:
-	original_level_rows = _get_current_level_rows()
-	_load_level(original_level_rows)
+	if level_entries.is_empty():
+		push_error("No level entries found.")
+		return
+
+	level_index = clampi(level_index, 0, level_entries.size() - 1)
+	_load_level(level_entries[level_index])
 
 
 func _load_next_level() -> void:
-	level_index = (level_index + 1) % levels.size()
+	if level_entries.is_empty():
+		return
+
+	level_index = (level_index + 1) % level_entries.size()
 	_load_current_level()
 
 
 func _load_previous_level() -> void:
-	level_index = (level_index - 1 + levels.size()) % levels.size()
+	if level_entries.is_empty():
+		return
+
+	level_index = (level_index - 1 + level_entries.size()) % level_entries.size()
 	_load_current_level()
 
 
-func _get_current_level_rows() -> Array[String]:
-	var rows: Array[String] = []
-	var source_rows := levels[level_index]["rows"] as Array
-	for row in source_rows:
-		rows.append(row as String)
-	return rows
-
-
-func _print_level_status() -> void:
-	var level_name := levels[level_index]["name"] as String
-	var purpose := levels[level_index]["purpose"] as String
-	print("LEVEL %d/%d: %s" % [level_index + 1, levels.size(), level_name])
+func _print_level_status(entry: Dictionary) -> void:
+	var level_name := entry.get("name", entry.get("id", "")) as String
+	var purpose := entry.get("purpose", "") as String
+	print("LEVEL %d/%d: %s" % [level_index + 1, level_entries.size(), level_name])
 	print("Purpose: %s" % purpose)
 	print("Controls: arrows/WASD move, Z undo, R reset, N next, B previous.")
 

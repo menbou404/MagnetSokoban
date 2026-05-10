@@ -21,6 +21,7 @@
 - `イベントモデル.md` の作成
 - `アニメーション方針.md` の作成
 - `レベル運用方針.md` の作成
+- `レベルデータ形式.md` の作成
 - `AGENTS.md` の整備
 - フェーズ別マイルストーン運用の導入
 - `docs` 配下への文書集約設計
@@ -42,27 +43,30 @@
 - `TurnResult` / `ActionEvent` / `AnimationDirector` の導入
 - プレイヤー移動、箱移動、磁力発動面、連鎖、同時処理のイベント列ベース再生
 - アニメーション再生中の入力停止
+- PHASE_07_LEVEL_PIPELINE の最小実装
+- 既存確認面 5 つの `levels/test/` 外部化
+- `levels/level_catalog.json` による確認用レベル順序管理
+- `LevelLoader.gd` の外部 JSON / catalog 読込対応
 
 ### 現在地
 
-仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY の最小実装は完了。
+仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE の最小実装は完了。
 箱は `MagneticBodyState` により、位置・向き・強さ・可動性を持つ磁力物体として保持されている。  
 箱を押した直後にだけ、押された箱を起点として直線探索、距離判定、引力 / 反発、連鎖処理を行う。
 競合解決では、強さが異なる場合に強い側を優先し、同強度の場合は両者を 1 マスずつ同時に動かす。
-現在は、5 つの確認面を `Main.gd` 内のレベル配列として持ち、N / B キーで切り替えられる。
 1 手の結果は `TurnResult` / `ActionEvent` のイベント列として生成され、`AnimationDirector` が `BoardView` の表示専用状態を使って phase 順に再生する。
 再生中は新しい入力を受け付けない。
-次は PHASE_07_LEVEL_PIPELINE として、確認用レベルを `Main.gd` から外部化し、`levels/` を正式なレベル管理場所として扱う段階である。
+確認用レベル 5 つは `levels/test/` の `.lvl.json` として外部化され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
+`Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
+次は Godot エディタ上で外部化後の実プレイ確認を行い、必要なら次フェーズの追加ギミックまたは本番レベル設計へ進む段階である。
 
 ## いま進める対象
 
 ### 直近の最優先
 
-1. `Main.gd` から確認面の直書きを外す
-2. `levels/test/` から確認用レベルを読み込めるようにする
-3. `LevelLoader.gd` を外部ファイル対応にする
-4. 必要なら `levels/level_catalog.json` を導入する
-5. 次のレベル / 前のレベル / リセットを新構造で維持する
+1. Godot エディタ上で外部化後の確認用レベルを実プレイ確認する
+2. 次フェーズとして追加ギミック、本番レベル設計、レベル選択 UI の優先順位を決める
+3. 新しい確認面を追加する場合は `levels/test/` と `levels/level_catalog.json` だけを更新する
 
 ### 直近で触らないもの
 
@@ -90,7 +94,7 @@
 
 ## 次に完了させるべき状態
 
-PHASE_07 の最小実装では以下を満たす。
+PHASE_07 の最小実装はコード上では以下を満たす。
 
 1. `Main.gd` に面データ直書きが残っていない
 2. `levels/` からレベルを読み込める
@@ -99,3 +103,5 @@ PHASE_07 の最小実装では以下を満たす。
 5. 既存の確認面が外部化後も動作する
 6. Main を触らずに新しい確認面を追加できる
 7. 既存のプレイフローを壊していない
+
+残る確認は、Godot エディタ上で各確認面の実プレイを行うこと。
