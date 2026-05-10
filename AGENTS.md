@@ -20,7 +20,9 @@
 8. `docs/アニメーション方針.md`
 9. `docs/レベル運用方針.md`
 10. `docs/レベルデータ形式.md`
-11. `docs/README_IMPLEMENTATION_ORDER.md`
+11. `docs/テストレベル設計.md`
+12. `docs/回路確認方針.md`
+13. `docs/README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて以下も読むこと。
 
@@ -57,6 +59,8 @@
 - アニメーション再生中は新しい入力を受け付けない
 - レベル内容は `Main.gd` に直書きせず、`levels/` 配下で管理する
 - レベル読込は `LevelLoader.gd` に集約する
+- 確認用レベルは回帰確認の資産として維持する
+- 新ギミック追加前後に既存ルールの確認面を確認する
 
 ## 責務分離ルール
 
@@ -97,6 +101,12 @@ resolver は `TurnResult` / `ActionEvent` 相当のイベントを生成して�
 
 確認用レベルは `levels/test/`、プレイ用レベルは `levels/play/` に分けることを基本とする。
 `Main.gd` や `BoardView.gd` がレベルファイル形式を直接解釈してはならない。
+
+### Regression
+
+確認用レベルは、仕様確認と回帰確認のための固定資産として扱うこと。
+
+1 レベル 1 主目的を基本とし、目的が分かる `id`、`name`、`description`、`tags` を持たせることを優先する。
 
 ## 作業完了時の出力
 

@@ -17,6 +17,22 @@
 
 #### 内容
 
+PHASE_08_RULE_REGRESSION_TESTS の設計文書を正式な文書構成に組み込んだ。
+
+`テストレベル設計.md`、`回路確認方針.md`、`PHASE_08_RULE_REGRESSION_TESTS.md` を読む順と実装順に追加し、`PROJECT_STATUS.md` を PHASE_08 開始前の現在地へ更新した。
+
+#### 理由
+
+新ギミック追加前に、基本押し、引力、反発、連鎖、競合解決、Undo、Reset、レベル再読込、アニメーション中入力停止を継続確認できる固定セットを整えるため。
+
+#### 次
+
+`テストレベル設計.md` の推奨最小セットに沿って `levels/test/` と `levels/level_catalog.json` を整理し、各確認面に目的と tags を持たせる。
+
+### 2026-05-11
+
+#### 内容
+
 PHASE_07_LEVEL_PIPELINE の最小実装として、既存確認面 5 つを `Main.gd` から `levels/test/` の `.lvl.json` へ外部化した。
 
 `levels/level_catalog.json` を追加し、確認用レベルの順序、分類、表示名、ファイルパスを管理するようにした。

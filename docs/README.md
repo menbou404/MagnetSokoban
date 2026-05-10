@@ -15,7 +15,9 @@
 7. `アニメーション方針.md`
 8. `レベル運用方針.md`
 9. `レベルデータ形式.md`
-10. `README_IMPLEMENTATION_ORDER.md`
+10. `テストレベル設計.md`
+11. `回路確認方針.md`
+12. `README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて読むもの:
 
@@ -61,6 +63,16 @@
 ### `レベルデータ形式.md`
 
 PHASE_07 で使う `.lvl.json` と `level_catalog.json` の最小形式を定義する。
+
+### `テストレベル設計.md`
+
+PHASE_08 で整備する確認用レベルの最小セット、目的、確認ポイント、推奨 tags を定義する。
+
+### `回路確認方針.md`
+
+新ギミック追加前後に既存ルールが壊れていないことを確認するための運用方針を定義する。
+
+文書内では回帰確認方針として扱う。
 
 ### `README_IMPLEMENTATION_ORDER.md`
 

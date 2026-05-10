@@ -17,6 +17,17 @@
 
 ### 2026-05-11
 
+- PHASE_08_RULE_REGRESSION_TESTS の追加に合わせて文書構成を更新
+- `AGENTS.md` と `docs/README.md` の読む順に `テストレベル設計.md` と `回路確認方針.md` を追加
+- `PROJECT_STATUS.md` を PHASE_08 の着手前状態へ更新
+- `README_IMPLEMENTATION_ORDER.md` に PHASE_08 用の実装順を追加
+- `SPEC.md` に回帰確認方針を追記
+- `レベルデータ形式.md` に `description` と `tags` の扱いを追記
+- `データ構造.md` と `用語集.md` に回帰確認用の項目と用語を追記
+- `PHASE_08_RULE_REGRESSION_TESTS.md`、`テストレベル設計.md`、`回路確認方針.md` に関連文書を追記
+
+### 2026-05-11
+
 - PHASE_07_LEVEL_PIPELINE の最小実装を実施
 - `docs/レベルデータ形式.md` を追加し、`.lvl.json` と `level_catalog.json` の最小形式を文書化
 - 既存確認面 5 つを `levels/test/` の `.lvl.json` へ外部化
