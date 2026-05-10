@@ -15,6 +15,17 @@
 
 ## ログ
 
+### 2026-05-11
+
+- PHASE_07_LEVEL_PIPELINE の追加に合わせて文書構成を更新
+- `AGENTS.md` と `docs/README.md` の読む順に `レベル運用方針.md` を追加
+- `PROJECT_STATUS.md` を PHASE_07 の着手前状態へ更新
+- `README_IMPLEMENTATION_ORDER.md` に PHASE_07 用の実装順を追加
+- `SPEC.md` にレベル外部化と `LevelLoader` 集約の方針を追記
+- `データ構造.md` に `LevelCatalog` 相当の考え方を追記
+- `用語集.md` に確認用レベル、プレイ用レベル、レベルカタログを追記
+- `レベル運用方針.md` と `PHASE_07_LEVEL_PIPELINE.md` のコードブロックを整え、状態と関連文書を追記
+
 ### 2026-05-10
 
 - PHASE_06_ANIMATION_READABILITY の最小実装を実施

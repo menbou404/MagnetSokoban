@@ -13,7 +13,8 @@
 5. `磁力解決アルゴリズム.md`
 6. `イベントモデル.md`
 7. `アニメーション方針.md`
-8. `README_IMPLEMENTATION_ORDER.md`
+8. `レベル運用方針.md`
+9. `README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて読むもの:
 
@@ -51,6 +52,10 @@
 ### `アニメーション方針.md`
 
 アニメーションの目的、責務分離、再生中の入力停止、表示状態の扱いを定義する。
+
+### `レベル運用方針.md`
+
+レベルデータの配置場所、確認用 / プレイ用レベルの分類、`LevelLoader` を入口にする方針を定義する。
 
 ### `README_IMPLEMENTATION_ORDER.md`
 
