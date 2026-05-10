@@ -16,6 +16,8 @@ const POLE_S_COLOR := Color(0.35, 0.55, 1.0, 0.95)
 const FACING_ARROW_COLOR := Color(1.0, 1.0, 1.0, 0.9)
 const STRENGTH_DOT_COLOR := Color(0.1, 0.12, 0.16, 0.9)
 const STRENGTH_DOT_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.75)
+const MAGNET_SOURCE_HIGHLIGHT_COLOR := Color(1.0, 0.94, 0.35, 0.95)
+const MAGNET_TARGET_HIGHLIGHT_COLOR := Color(0.45, 0.9, 1.0, 0.9)
 
 @export var cell_size := 64
 
@@ -27,14 +29,101 @@ const STRENGTH_DOT_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.75)
 @export var tex_player: Texture2D
 
 var state: GameState
+var _player_display_pos := Vector2.ZERO
+var _body_display_positions := {}
+var _highlight_faces: Array[Dictionary] = []
 
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 
-func set_state(value: GameState) -> void:
+func set_state(value: GameState, sync_display_positions := true) -> void:
 	state = value
+	if sync_display_positions:
+		sync_display_from_state()
+	queue_redraw()
+
+
+func sync_display_from_state() -> void:
+	if state == null:
+		return
+
+	_player_display_pos = _to_display_pos(state.player_pos)
+	_body_display_positions.clear()
+	for body in state.bodies:
+		_body_display_positions[body.id] = _to_display_pos(body.pos)
+
+
+func animate_movement_batch(
+	player_move: Dictionary,
+	body_moves: Array[Dictionary],
+	duration: float
+) -> void:
+	var safe_duration := maxf(duration, 0.01)
+	var tween := create_tween()
+	tween.set_parallel(true)
+
+	if not player_move.is_empty():
+		var player_from := player_move["from"] as Vector2i
+		var player_to := player_move["to"] as Vector2i
+		_player_display_pos = _to_display_pos(player_from)
+		tween.tween_method(
+			Callable(self, "_set_player_display_pos"),
+			_to_display_pos(player_from),
+			_to_display_pos(player_to),
+			safe_duration
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	for body_move in body_moves:
+		var body_id := body_move["body_id"] as int
+		var from_pos := body_move["from"] as Vector2i
+		var to_pos := body_move["to"] as Vector2i
+		_body_display_positions[body_id] = _to_display_pos(from_pos)
+		tween.tween_method(
+			Callable(self, "_set_body_display_pos").bind(body_id),
+			_to_display_pos(from_pos),
+			_to_display_pos(to_pos),
+			safe_duration
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	queue_redraw()
+	await tween.finished
+
+	if not player_move.is_empty():
+		_player_display_pos = _to_display_pos(player_move["to"] as Vector2i)
+
+	for body_move in body_moves:
+		_body_display_positions[body_move["body_id"] as int] = _to_display_pos(body_move["to"] as Vector2i)
+
+	queue_redraw()
+
+
+func show_magnet_triggers(triggers: Array[Dictionary], duration: float) -> void:
+	_highlight_faces.clear()
+
+	for trigger in triggers:
+		var source_id := trigger["body_id"] as int
+		var source_face := trigger.get("source_face", trigger["direction"]) as Vector2i
+		var target_id := trigger.get("target_id", -1) as int
+		var target_face := trigger.get("target_face", -source_face) as Vector2i
+
+		_highlight_faces.append({
+			"body_id": source_id,
+			"face": source_face,
+			"color": MAGNET_SOURCE_HIGHLIGHT_COLOR,
+		})
+
+		if target_id != -1:
+			_highlight_faces.append({
+				"body_id": target_id,
+				"face": target_face,
+				"color": MAGNET_TARGET_HIGHLIGHT_COLOR,
+			})
+
+	queue_redraw()
+	await get_tree().create_timer(maxf(duration, 0.01)).timeout
+	_highlight_faces.clear()
 	queue_redraw()
 
 
@@ -59,19 +148,19 @@ func _draw() -> void:
 				_draw_wall_cell(rect)
 
 	for body in state.bodies:
-		var box_pos := body.pos
+		var box_pos := _get_body_display_pos(body)
 		var box_rect := Rect2(
-			Vector2(box_pos.x * cell_size, box_pos.y * cell_size),
+			box_pos * cell_size,
 			Vector2(cell_size, cell_size)
 		)
 
-		if state.goals.has(box_pos):
+		if state.goals.has(body.pos):
 			_draw_box_on_goal(box_rect, body)
 		else:
 			_draw_box(box_rect, body)
 
 	var player_rect := Rect2(
-		Vector2(state.player_pos.x * cell_size, state.player_pos.y * cell_size),
+		_player_display_pos * cell_size,
 		Vector2(cell_size, cell_size)
 	)
 	_draw_player(player_rect)
@@ -136,6 +225,7 @@ func _draw_pole_marker(rect: Rect2, body: MagneticBodyStateScript) -> void:
 
 	_draw_facing_arrow(rect, body.facing)
 	_draw_strength_marker(rect, body.strength)
+	_draw_highlight_faces(rect, body.id)
 
 
 func _draw_face_pole_marker(rect: Rect2, face_direction: Vector2i, color: Color) -> void:
@@ -196,3 +286,60 @@ func _get_pole_color(pole: String) -> Color:
 	if pole == MagneticBodyStateScript.POLE_N:
 		return POLE_N_COLOR
 	return POLE_S_COLOR
+
+
+func _draw_highlight_faces(rect: Rect2, body_id: int) -> void:
+	for highlight in _highlight_faces:
+		if (highlight["body_id"] as int) != body_id:
+			continue
+
+		_draw_face_highlight(
+			rect,
+			highlight["face"] as Vector2i,
+			highlight["color"] as Color
+		)
+
+
+func _draw_face_highlight(rect: Rect2, face_direction: Vector2i, color: Color) -> void:
+	var center := rect.get_center()
+	var half_size := rect.size.x * 0.5
+	var start := center
+	var end := center
+
+	if face_direction == Vector2i.LEFT:
+		start = rect.position + Vector2(8, 8)
+		end = rect.position + Vector2(8, rect.size.y - 8)
+	elif face_direction == Vector2i.RIGHT:
+		start = rect.position + Vector2(rect.size.x - 8, 8)
+		end = rect.position + Vector2(rect.size.x - 8, rect.size.y - 8)
+	elif face_direction == Vector2i.UP:
+		start = rect.position + Vector2(8, 8)
+		end = rect.position + Vector2(rect.size.x - 8, 8)
+	elif face_direction == Vector2i.DOWN:
+		start = rect.position + Vector2(8, rect.size.y - 8)
+		end = rect.position + Vector2(rect.size.x - 8, rect.size.y - 8)
+	else:
+		return
+
+	draw_line(start, end, color, maxf(5.0, half_size * 0.16))
+
+
+func _set_player_display_pos(value: Vector2) -> void:
+	_player_display_pos = value
+	queue_redraw()
+
+
+func _set_body_display_pos(value: Vector2, body_id: int) -> void:
+	_body_display_positions[body_id] = value
+	queue_redraw()
+
+
+func _get_body_display_pos(body: MagneticBodyStateScript) -> Vector2:
+	if _body_display_positions.has(body.id):
+		return _body_display_positions[body.id] as Vector2
+
+	return _to_display_pos(body.pos)
+
+
+func _to_display_pos(cell_pos: Vector2i) -> Vector2:
+	return Vector2(cell_pos.x, cell_pos.y)

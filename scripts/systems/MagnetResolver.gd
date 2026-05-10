@@ -1,14 +1,21 @@
 class_name MagnetResolver
 extends RefCounted
 
+const ActionEventScript := preload("res://scripts/core/ActionEvent.gd")
 const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.gd")
+const TurnResultScript := preload("res://scripts/core/TurnResult.gd")
 
 const INTERACTION_ATTRACT := "attract"
 const INTERACTION_REPEL := "repel"
 const INVALID_BODY_ID := -1
 
 
-func apply_after_push(state: GameState, source_id: int, dir: Vector2i) -> void:
+func apply_after_push(
+	state: GameState,
+	source_id: int,
+	dir: Vector2i,
+	turn_result: TurnResultScript
+) -> void:
 	if dir == Vector2i.ZERO:
 		return
 
@@ -32,7 +39,7 @@ func apply_after_push(state: GameState, source_id: int, dir: Vector2i) -> void:
 			continue
 
 		processed_sources[current_source_id] = true
-		var moved_body_ids := _process_source(state, source, current_direction)
+		var moved_body_ids := _process_source(state, source, current_direction, turn_result)
 
 		if moved_body_ids.is_empty():
 			continue
@@ -49,13 +56,23 @@ func apply_after_push(state: GameState, source_id: int, dir: Vector2i) -> void:
 func _process_source(
 	state: GameState,
 	source: MagneticBodyStateScript,
-	direction: Vector2i
+	direction: Vector2i,
+	turn_result: TurnResultScript
 ) -> Array[int]:
 	var candidate := build_interaction_candidate(state, source, direction)
 	if candidate.is_empty():
 		return _empty_body_id_list()
 
-	return resolve_interaction_candidate(state, candidate)
+	if turn_result != null:
+		turn_result.add_event(ActionEventScript.magnet_trigger(
+			turn_result.allocate_phase(),
+			candidate["source_id"] as int,
+			direction,
+			candidate["target_id"] as int,
+			candidate["interaction_type"] as String
+		))
+
+	return resolve_interaction_candidate(state, candidate, turn_result)
 
 
 func find_first_target_in_line(
@@ -142,17 +159,25 @@ func resolve_interaction_type(
 	return INTERACTION_ATTRACT
 
 
-func resolve_interaction_candidate(state: GameState, candidate: Dictionary) -> Array[int]:
+func resolve_interaction_candidate(
+	state: GameState,
+	candidate: Dictionary,
+	turn_result: TurnResultScript
+) -> Array[int]:
 	var source_strength := candidate["source_strength"] as int
 	var target_strength := candidate["target_strength"] as int
 
 	if source_strength == target_strength:
-		return _resolve_equal_strength_interaction(state, candidate)
+		return _resolve_equal_strength_interaction(state, candidate, turn_result)
 
-	return _resolve_stronger_interaction(state, candidate)
+	return _resolve_stronger_interaction(state, candidate, turn_result)
 
 
-func _resolve_stronger_interaction(state: GameState, candidate: Dictionary) -> Array[int]:
+func _resolve_stronger_interaction(
+	state: GameState,
+	candidate: Dictionary,
+	turn_result: TurnResultScript
+) -> Array[int]:
 	var source_strength := candidate["source_strength"] as int
 	var target_strength := candidate["target_strength"] as int
 
@@ -171,12 +196,17 @@ func _resolve_stronger_interaction(state: GameState, candidate: Dictionary) -> A
 		return _empty_body_id_list()
 
 	apply_planned_moves(state, planned_moves)
+	_add_body_move_event(turn_result, planned_move, candidate)
 	var moved_ids: Array[int] = []
 	moved_ids.append(planned_move["body_id"] as int)
 	return moved_ids
 
 
-func _resolve_equal_strength_interaction(state: GameState, candidate: Dictionary) -> Array[int]:
+func _resolve_equal_strength_interaction(
+	state: GameState,
+	candidate: Dictionary,
+	turn_result: TurnResultScript
+) -> Array[int]:
 	var moved_ids: Array[int] = []
 	var source_id := candidate["source_id"] as int
 	var target_id := candidate["target_id"] as int
@@ -221,6 +251,7 @@ func _resolve_equal_strength_interaction(state: GameState, candidate: Dictionary
 			break
 
 		apply_planned_moves(state, planned_moves)
+		_add_simultaneous_move_event(turn_result, planned_moves, candidate)
 		_append_unique_body_id(moved_ids, source_id)
 		_append_unique_body_id(moved_ids, target_id)
 
@@ -363,6 +394,52 @@ func apply_planned_moves(state: GameState, planned_moves: Array[Dictionary]) -> 
 			continue
 
 		body.pos = planned_move["to"] as Vector2i
+
+
+func _add_body_move_event(
+	turn_result: TurnResultScript,
+	planned_move: Dictionary,
+	candidate: Dictionary
+) -> void:
+	if turn_result == null:
+		return
+
+	var from_pos := planned_move["from"] as Vector2i
+	var to_pos := planned_move["to"] as Vector2i
+	turn_result.add_event(ActionEventScript.body_move(
+		turn_result.allocate_phase(),
+		planned_move["body_id"] as int,
+		from_pos,
+		to_pos,
+		to_pos - from_pos,
+		candidate["interaction_type"] as String
+	))
+
+
+func _add_simultaneous_move_event(
+	turn_result: TurnResultScript,
+	planned_moves: Array[Dictionary],
+	candidate: Dictionary
+) -> void:
+	if turn_result == null:
+		return
+
+	var event_moves: Array[Dictionary] = []
+	for planned_move in planned_moves:
+		var from_pos := planned_move["from"] as Vector2i
+		var to_pos := planned_move["to"] as Vector2i
+		event_moves.append({
+			"body_id": planned_move["body_id"] as int,
+			"from": from_pos,
+			"to": to_pos,
+			"direction": to_pos - from_pos,
+			"reason": candidate["interaction_type"] as String,
+		})
+
+	turn_result.add_event(ActionEventScript.simultaneous_move(
+		turn_result.allocate_phase(),
+		event_moves
+	))
 
 
 func _get_line_distance(from_pos: Vector2i, to_pos: Vector2i, direction: Vector2i) -> int:

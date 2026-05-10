@@ -7,11 +7,13 @@
 ## 読む順番
 
 1. `PROJECT_STATUS.md`
-2. `spec.md`
+2. `SPEC.md`
 3. `用語集.md`
 4. `データ構造.md`
 5. `磁力解決アルゴリズム.md`
-6. `README_IMPLEMENTATION_ORDER.md`
+6. `イベントモデル.md`
+7. `アニメーション方針.md`
+8. `README_IMPLEMENTATION_ORDER.md`
 
 必要に応じて読むもの:
 
@@ -25,7 +27,7 @@
 
 現在の到達点と、直近で進める対象をまとめる。
 
-### `spec.md`
+### `SPEC.md`
 
 ゲーム全体の仕様をまとめる。  
 最も広い範囲の正本。
@@ -42,6 +44,14 @@
 
 磁力処理の流れと優先順位を定義する。
 
+### `イベントモデル.md`
+
+1 手の論理結果をアニメーション再生へ渡すための `TurnResult` / `ActionEvent` の構造を定義する。
+
+### `アニメーション方針.md`
+
+アニメーションの目的、責務分離、再生中の入力停止、表示状態の扱いを定義する。
+
 ### `README_IMPLEMENTATION_ORDER.md`
 
 実装順を固定するための手順書。
@@ -56,7 +66,7 @@
 
 ## 運用ルール
 
-- 仕様変更時は、先に `spec.md` か関連文書を更新する
+- 仕様変更時は、先に `SPEC.md` か関連文書を更新する
 - 大きな変更後は `history/MILESTONE_HISTORY.md` を更新する
 - 細かな作業ごとは `history/WORKLOG.md` に追記する
 - 現在地は常に `PROJECT_STATUS.md` を正とする

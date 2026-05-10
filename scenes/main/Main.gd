@@ -1,5 +1,7 @@
 extends Node2D
 
+const AnimationDirectorScript := preload("res://scripts/systems/AnimationDirector.gd")
+
 var levels: Array[Dictionary] = [
 	{
 		"name": "01 Basic Push",
@@ -68,7 +70,9 @@ var level_loader := LevelLoader.new()
 var undo_history := UndoHistory.new()
 var win_checker := WinChecker.new()
 var magnet_resolver := MagnetResolver.new()
+var animation_director := AnimationDirectorScript.new()
 var move_resolver: MoveResolver
+var is_animating := false
 
 
 func _ready() -> void:
@@ -77,6 +81,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_animating:
+		return
+
 	if event.is_action_pressed("move_left"):
 		_try_move(Vector2i.LEFT)
 	elif event.is_action_pressed("move_right"):
@@ -114,11 +121,14 @@ func _resize_window() -> void:
 
 
 func _try_move(dir: Vector2i) -> void:
-	var moved := move_resolver.try_move(game_state, dir)
-	if not moved:
+	var turn_result := move_resolver.try_move(game_state, dir)
+	if turn_result == null:
 		return
 
+	is_animating = true
+	await animation_director.play_turn(turn_result, board_view)
 	board_view.set_state(game_state)
+	is_animating = false
 
 	if game_state.cleared:
 		print("CLEAR: moves = %d" % game_state.move_count)

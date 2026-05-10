@@ -15,6 +15,26 @@
 
 ## ログ
 
+### 2026-05-10
+
+- PHASE_06_ANIMATION_READABILITY の最小実装を実施
+- `ActionEvent.gd` と `TurnResult.gd` を追加し、1 手のイベント列、phase、クリア状態、手数を保持できるようにした
+- `AnimationDirector.gd` を追加し、`TurnResult.events` を phase 単位で再生するようにした
+- `MoveResolver.gd` が `bool` ではなく `TurnResult` を返し、プレイヤー移動と箱押しをイベント化するようにした
+- `MagnetResolver.gd` が `magnet_trigger`、`body_move`、`simultaneous_move` を記録するようにした
+- `BoardView` に表示専用の補間位置と磁力面ハイライトを追加した
+- `Main.gd` は `AnimationDirector` 経由で再生し、再生中は入力を受け付けないようにした
+- Godot 4.6.2 のヘッドレス起動確認、1 手の `TurnResult` 生成スモーク確認、scene 経由のアニメーション再生スモーク確認を実施
+
+### 2026-05-10
+
+- PHASE_06_ANIMATION_READABILITY の追加に合わせて文書構成を更新
+- `AGENTS.md` と `docs/README.md` の読む順に `イベントモデル.md` と `アニメーション方針.md` を追加
+- `PROJECT_STATUS.md` を PHASE_06 の着手前状態へ更新
+- `README_IMPLEMENTATION_ORDER.md` に PHASE_06 用の実装順を追加
+- `SPEC.md` にイベント列ベースのアニメーション方針を追記
+- `PHASE_06_ANIMATION_READABILITY.md` に状態と関連文書を追記
+
 ### 2026-05-03
 
 - PHASE_05_GAMEPLAY_CONTENT の最小実装を実施
