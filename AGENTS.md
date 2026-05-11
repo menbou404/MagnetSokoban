@@ -4,7 +4,7 @@
 
 このファイルは、このリポジトリで作業するエージェント向けの最上位ルールである。  
 作業前に必ず読むこと。  
-詳細仕様、進捗、実装順、履歴は `docs/` 以下を参照すること。
+詳細仕様、進捗、設計要点、履歴は `docs/` 以下を参照すること。
 
 ## 最初に読む順番
 
@@ -13,22 +13,14 @@
 1. `docs/README.md`
 2. `docs/PROJECT_STATUS.md`
 3. `docs/SPEC.md`
-4. `docs/用語集.md`
-5. `docs/データ構造.md`
-6. `docs/磁力解決アルゴリズム.md`
-7. `docs/イベントモデル.md`
-8. `docs/アニメーション方針.md`
-9. `docs/レベル運用方針.md`
-10. `docs/レベルデータ形式.md`
-11. `docs/テストレベル設計.md`
-12. `docs/回帰確認方針.md`
-13. `docs/README_IMPLEMENTATION_ORDER.md`
+4. `docs/CORE_DESIGN.md`
+5. `docs/LEVELS_AND_REGRESSION.md`
+6. `docs/PHASES.md`
+7. `docs/HISTORY.md`
 
 必要に応じて以下も読むこと。
 
-- `docs/milestones/PHASE_*.md`
-- `docs/history/MILESTONE_HISTORY.md`
-- `docs/history/WORKLOG.md`
+- 必要に応じて、過去の git 差分
 
 ## 基本ルール
 
@@ -39,8 +31,8 @@
 - 未確定仕様を勝手に実装で埋めないこと
 - 仕様変更を伴う場合は、先に `docs/` を更新すること
 - 作業後は `docs/PROJECT_STATUS.md` を更新すること
-- 大きな変更後は `docs/history/MILESTONE_HISTORY.md` を更新すること
-- 細かな作業ログは `docs/history/WORKLOG.md` に残すこと
+- 大きな変更後は `docs/HISTORY.md` を更新すること
+- 細かな作業ログは `docs/HISTORY.md` に残すこと
 - 暫定実装は必ず明記すること
 
 ## このプロジェクトの正式方針

@@ -15,15 +15,7 @@
 - `BoardView` への描画分離
 - Kenney 素材の仮導入
 - `SPEC.md` の作成
-- `用語集.md` の作成
-- `データ構造.md` の作成
-- `磁力解決アルゴリズム.md` の作成
-- `イベントモデル.md` の作成
-- `アニメーション方針.md` の作成
-- `レベル運用方針.md` の作成
-- `レベルデータ形式.md` の作成
-- `テストレベル設計.md` の作成
-- `回帰確認方針.md` の作成
+- 旧個別設計 docs の作成と、docs 圧縮として `CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` へ統合
 - `AGENTS.md` の整備
 - フェーズ別マイルストーン運用の導入
 - `docs` 配下への文書集約設計
@@ -66,6 +58,7 @@
 確認用レベルは `levels/test/` の `.lvl.json` として 11 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
 次は Godot エディタ上で回帰確認面を実プレイ確認し、その後 PHASE_09_ROTATION_GIMMICK などの追加ギミックに進む段階である。
+文書は圧縮済みで、読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
 
 ## いま進める対象
 
