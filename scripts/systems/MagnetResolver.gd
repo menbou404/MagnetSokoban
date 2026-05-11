@@ -16,15 +16,38 @@ func apply_after_push(
 	dir: Vector2i,
 	turn_result: TurnResultScript
 ) -> void:
+	var source_ids: Array[int] = []
+	source_ids.append(source_id)
+	apply_after_push_sources(state, source_ids, dir, turn_result)
+
+
+func apply_after_push_sources(
+	state: GameState,
+	source_ids: Array[int],
+	dir: Vector2i,
+	turn_result: TurnResultScript
+) -> void:
 	if dir == Vector2i.ZERO:
 		return
 
 	var processed_sources := {}
 	var pending_sources: Array[Dictionary] = []
-	pending_sources.append({
-		"source_id": source_id,
-		"direction": dir,
-	})
+	var primary_source_ids := _collect_unique_source_ids(source_ids)
+	var primary_moved_body_ids := _process_source_batch(
+		state,
+		primary_source_ids,
+		dir,
+		turn_result
+	)
+
+	for source_id in primary_source_ids:
+		processed_sources[source_id] = true
+
+	for moved_body_id in primary_moved_body_ids:
+		pending_sources.append({
+			"source_id": moved_body_id,
+			"direction": dir,
+		})
 
 	while not pending_sources.is_empty():
 		var current: Dictionary = pending_sources.pop_front()
@@ -59,20 +82,45 @@ func _process_source(
 	direction: Vector2i,
 	turn_result: TurnResultScript
 ) -> Array[int]:
-	var candidate := build_interaction_candidate(state, source, direction)
-	if candidate.is_empty():
+	var source_ids: Array[int] = []
+	source_ids.append(source.id)
+	return _process_source_batch(state, source_ids, direction, turn_result)
+
+
+func _process_source_batch(
+	state: GameState,
+	source_ids: Array[int],
+	direction: Vector2i,
+	turn_result: TurnResultScript
+) -> Array[int]:
+	var candidates: Array[Dictionary] = []
+
+	for source_id in source_ids:
+		var source := state.get_body_by_id(source_id)
+		if source == null:
+			continue
+
+		var candidate := build_interaction_candidate(state, source, direction)
+		if candidate.is_empty():
+			continue
+
+		candidates.append(candidate)
+
+	if candidates.is_empty():
 		return _empty_body_id_list()
 
 	if turn_result != null:
-		turn_result.add_event(ActionEventScript.magnet_trigger(
-			turn_result.allocate_phase(),
-			candidate["source_id"] as int,
-			direction,
-			candidate["target_id"] as int,
-			candidate["interaction_type"] as String
-		))
+		var trigger_phase := turn_result.allocate_phase()
+		for candidate in candidates:
+			turn_result.add_event(ActionEventScript.magnet_trigger(
+				trigger_phase,
+				candidate["source_id"] as int,
+				direction,
+				candidate["target_id"] as int,
+				candidate["interaction_type"] as String
+			))
 
-	return resolve_interaction_candidate(state, candidate, turn_result)
+	return resolve_interaction_candidates(state, candidates, turn_result)
 
 
 func find_first_target_in_line(
@@ -173,6 +221,51 @@ func resolve_interaction_candidate(
 	return _resolve_stronger_interaction(state, candidate, turn_result)
 
 
+func resolve_interaction_candidates(
+	state: GameState,
+	candidates: Array[Dictionary],
+	turn_result: TurnResultScript
+) -> Array[int]:
+	if candidates.is_empty():
+		return _empty_body_id_list()
+
+	if candidates.size() == 1:
+		return resolve_interaction_candidate(state, candidates[0], turn_result)
+
+	var strongest_priority := -1
+	for candidate in candidates:
+		strongest_priority = maxi(strongest_priority, candidate["priority_score"] as int)
+
+	var strongest_candidates: Array[Dictionary] = []
+	for candidate in candidates:
+		if (candidate["priority_score"] as int) == strongest_priority:
+			strongest_candidates.append(candidate)
+
+	if strongest_candidates.size() == 1:
+		return resolve_interaction_candidate(state, strongest_candidates[0], turn_result)
+
+	var planned_moves: Array[Dictionary] = []
+	for candidate in strongest_candidates:
+		var candidate_moves := _plan_candidate_first_step(state, candidate)
+		for candidate_move in candidate_moves:
+			planned_moves.append(candidate_move)
+
+	if planned_moves.is_empty():
+		return _empty_body_id_list()
+
+	if not _are_planned_moves_valid(state, planned_moves):
+		return _empty_body_id_list()
+
+	apply_planned_moves(state, planned_moves)
+	_add_planned_moves_event(turn_result, planned_moves)
+
+	var moved_ids: Array[int] = []
+	for planned_move in planned_moves:
+		_append_unique_body_id(moved_ids, planned_move["body_id"] as int)
+
+	return moved_ids
+
+
 func _resolve_stronger_interaction(
 	state: GameState,
 	candidate: Dictionary,
@@ -200,6 +293,53 @@ func _resolve_stronger_interaction(
 	var moved_ids: Array[int] = []
 	moved_ids.append(planned_move["body_id"] as int)
 	return moved_ids
+
+
+func _plan_candidate_first_step(state: GameState, candidate: Dictionary) -> Array[Dictionary]:
+	var planned_moves: Array[Dictionary] = []
+	var source_strength := candidate["source_strength"] as int
+	var target_strength := candidate["target_strength"] as int
+
+	if source_strength == target_strength:
+		var source := state.get_body_by_id(candidate["source_id"] as int)
+		var target := state.get_body_by_id(candidate["target_id"] as int)
+		if source == null or target == null:
+			return planned_moves
+
+		var interaction_type := candidate["interaction_type"] as String
+		var direction := candidate["direction"] as Vector2i
+		var source_move := _plan_single_step_move(
+			state,
+			source,
+			_get_source_move_direction(interaction_type, direction)
+		)
+		var target_move := _plan_single_step_move(
+			state,
+			target,
+			_get_target_move_direction(interaction_type, direction)
+		)
+
+		if source_move.is_empty() or target_move.is_empty():
+			return _empty_planned_move_list()
+
+		source_move["reason"] = interaction_type
+		target_move["reason"] = interaction_type
+		planned_moves.append(source_move)
+		planned_moves.append(target_move)
+		return planned_moves
+
+	var planned_move := {}
+	if source_strength > target_strength:
+		planned_move = _plan_target_move(state, candidate)
+	else:
+		planned_move = _plan_source_move(state, candidate)
+
+	if planned_move.is_empty():
+		return planned_moves
+
+	planned_move["reason"] = candidate["interaction_type"] as String
+	planned_moves.append(planned_move)
+	return planned_moves
 
 
 func _resolve_equal_strength_interaction(
@@ -442,6 +582,31 @@ func _add_simultaneous_move_event(
 	))
 
 
+func _add_planned_moves_event(
+	turn_result: TurnResultScript,
+	planned_moves: Array[Dictionary]
+) -> void:
+	if turn_result == null:
+		return
+
+	var event_moves: Array[Dictionary] = []
+	for planned_move in planned_moves:
+		var from_pos := planned_move["from"] as Vector2i
+		var to_pos := planned_move["to"] as Vector2i
+		event_moves.append({
+			"body_id": planned_move["body_id"] as int,
+			"from": from_pos,
+			"to": to_pos,
+			"direction": to_pos - from_pos,
+			"reason": planned_move.get("reason", ""),
+		})
+
+	turn_result.add_event(ActionEventScript.simultaneous_move(
+		turn_result.allocate_phase(),
+		event_moves
+	))
+
+
 func _get_line_distance(from_pos: Vector2i, to_pos: Vector2i, direction: Vector2i) -> int:
 	var delta := to_pos - from_pos
 
@@ -469,6 +634,18 @@ func _append_unique_body_id(body_ids: Array[int], body_id: int) -> void:
 	body_ids.append(body_id)
 
 
+func _collect_unique_source_ids(source_ids: Array[int]) -> Array[int]:
+	var unique_ids: Array[int] = []
+	for source_id in source_ids:
+		_append_unique_body_id(unique_ids, source_id)
+	return unique_ids
+
+
 func _empty_body_id_list() -> Array[int]:
 	var body_ids: Array[int] = []
 	return body_ids
+
+
+func _empty_planned_move_list() -> Array[Dictionary]:
+	var planned_moves: Array[Dictionary] = []
+	return planned_moves

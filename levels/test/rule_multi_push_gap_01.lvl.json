@@ -1,0 +1,14 @@
+{
+  "id": "rule_multi_push_gap_01",
+  "name": "05 Rule Multi Push Gap",
+  "purpose": "a gap breaks the push-line",
+  "description": "空きマスをまたいだ先の箱は同じ押し列に含まれないことを確認する。",
+  "tags": ["push", "multi_push", "gap"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>.>G...#",
+    "#.........#",
+    "###########"
+  ]
+}

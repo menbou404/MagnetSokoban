@@ -6,6 +6,21 @@
 
 新しい記録は上に追加する。
 
+## 2026-05-12
+
+### PHASE_09_BASICPUSH
+
+`MoveResolver.gd` の通常押しを押し列処理へ拡張し、隙間なく連続する複数の可動箱をまとめて 1 マス押せるようにした。
+押しで同時に動いた箱の id 一覧を `MagnetResolver.gd` へ渡し、一次起点候補を同じ段階で評価できるようにした。
+PHASE_09 用に複数箱押し、3 個押し、壁ブロック、隙間、複数一次起点、押し後磁力、Undo の確認面を追加し、`levels/level_catalog.json` へ登録した。
+Godot headless 起動と PHASE_09 用スモーク確認を行った。
+
+### PHASE_09 / PHASE_10 マイルストーン追加
+
+`docs/milestones/PHASE_09_BASICPUSH.md` と `docs/milestones/PHASE_10_ROTATION_GIMMICK.md` を追加した。
+`PHASES.md` と `PROJECT_STATUS.md` を更新し、次フェーズを PHASE_09_BASICPUSH、その次を PHASE_10_ROTATION_GIMMICK として整理した。
+`README.md` と `AGENTS.md` に、着手対象の `docs/milestones/PHASE_*.md` を読む運用を追記した。
+
 ## 2026-05-11
 
 ### docs 圧縮

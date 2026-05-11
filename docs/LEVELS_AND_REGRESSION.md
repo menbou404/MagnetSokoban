@@ -88,6 +88,7 @@ levels/
 確認対象:
 
 - 基本押し
+- 複数箱の通常押し
 - 引力
 - 反発
 - 連鎖
@@ -102,6 +103,13 @@ levels/
 ## 現在の確認面
 
 - `rule_push_01`: 基本移動、箱押し、壁、ゴール
+- `rule_multi_push_01`: 2 個連続の箱をまとめて押す
+- `rule_multi_push_three_01`: 3 個以上の箱を同じ押し列処理で押す
+- `rule_multi_push_blocked_01`: 押し列の先頭が壁で止まる
+- `rule_multi_push_gap_01`: 空きマスで押し列が切れる
+- `rule_multi_push_dual_sources_01`: 押しで同時に動いた箱が一次起点候補になる
+- `rule_multi_push_then_magnet_01`: 押し列成立後に磁力処理へ進む
+- `system_multi_push_undo_01`: 複数箱押し後の Undo
 - `rule_attract_01`: 引力
 - `rule_repel_01`: 反発
 - `rule_chain_01`: 連鎖

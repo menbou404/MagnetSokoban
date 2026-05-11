@@ -1,0 +1,14 @@
+{
+  "id": "rule_multi_push_then_magnet_01",
+  "name": "07 Rule Multi Push Then Magnet",
+  "purpose": "magnet resolution runs after push-line movement",
+  "description": "押し列が成立した後に磁力処理へ進み、押しで同時に動いた箱が一次起点候補になることを確認する。",
+  "tags": ["push", "multi_push", "magnet"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P^4.G1...#",
+    "#..........#",
+    "############"
+  ]
+}

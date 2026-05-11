@@ -1,0 +1,14 @@
+{
+  "id": "rule_multi_push_01",
+  "name": "02 Rule Multi Push",
+  "purpose": "two adjacent movable boxes are pushed together",
+  "description": "隙間なく連続する 2 個の可動箱を、通常押しでまとめて 1 マス動かせることを確認する。",
+  "tags": ["push", "multi_push"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>>G....#",
+    "#.........#",
+    "###########"
+  ]
+}

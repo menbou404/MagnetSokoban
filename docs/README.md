@@ -13,6 +13,8 @@
 5. `PHASES.md`
 6. `HISTORY.md`
 
+着手対象が決まっている場合は、対応する `milestones/PHASE_*.md` も読む。
+
 ## 文書の役割
 
 ### `PROJECT_STATUS.md`
@@ -34,7 +36,11 @@
 
 ### `PHASES.md`
 
-フェーズ別マイルストーンをまとめる。
+フェーズ別マイルストーンの概要をまとめる。
+
+### `milestones/PHASE_*.md`
+
+これから着手するフェーズの詳細な目的、対象、完了条件をまとめる。
 
 ### `HISTORY.md`
 

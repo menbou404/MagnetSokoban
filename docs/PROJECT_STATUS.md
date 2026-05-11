@@ -22,6 +22,8 @@
 - PHASE_06_ANIMATION_READABILITY のマイルストーン作成
 - PHASE_07_LEVEL_PIPELINE のマイルストーン作成
 - PHASE_08_RULE_REGRESSION_TESTS のマイルストーン作成
+- PHASE_09_BASICPUSH のマイルストーン作成
+- PHASE_10_ROTATION_GIMMICK のマイルストーン作成
 - PHASE_02_DATA_MODEL の実装
 - `MagneticBodyState` の導入
 - `GameState` / `LevelLoader` / Undo スナップショットの新データ構造対応
@@ -46,19 +48,24 @@
 - `levels/test/` の回帰確認用 11 面セット整備
 - 各確認面の `id`、`name`、`description`、`tags` 整備
 - 回帰確認向け `levels/level_catalog.json` の順序整理
+- PHASE_09_BASICPUSH の最小実装
+- 隙間なく連続する複数可動箱の通常押し列処理
+- 押しで同時に動いた箱すべてを一次起点候補にする磁力処理接続
+- 複数箱押し確認用レベルの追加
 
 ### 現在地
 
-仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS の最小実装は完了。
+仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS、PHASE_09_BASICPUSH の最小実装は完了。
 箱は `MagneticBodyState` により、位置・向き・強さ・可動性を持つ磁力物体として保持されている。  
 箱を押した直後にだけ、押された箱を起点として直線探索、距離判定、引力 / 反発、連鎖処理を行う。
 競合解決では、強さが異なる場合に強い側を優先し、同強度の場合は両者を 1 マスずつ同時に動かす。
 1 手の結果は `TurnResult` / `ActionEvent` のイベント列として生成され、`AnimationDirector` が `BoardView` の表示専用状態を使って phase 順に再生する。
 再生中は新しい入力を受け付けない。
-確認用レベルは `levels/test/` の `.lvl.json` として 11 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
+確認用レベルは `levels/test/` の `.lvl.json` として 18 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
-次は Godot エディタ上で回帰確認面を実プレイ確認し、その後 PHASE_09_ROTATION_GIMMICK などの追加ギミックに進む段階である。
-文書は圧縮済みで、読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
+次は Godot エディタ上で回帰確認面と複数箱押し確認面を実プレイ確認し、その後 PHASE_10_ROTATION_GIMMICK に進む段階である。
+文書は圧縮済みで、基本の読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
+着手フェーズの詳細は `docs/milestones/PHASE_*.md` を読む。
 
 ## いま進める対象
 
@@ -66,13 +73,12 @@
 
 1. Godot エディタ上で 11 面の回帰確認セットを実プレイ確認する
 2. 新ギミック追加前後に `levels/test/` の確認面を一通り確認する運用を定着させる
-3. 次フェーズとして PHASE_09_ROTATION_GIMMICK または固定磁石 / 遮断系の優先順位を決める
+3. PHASE_10_ROTATION_GIMMICK に着手する
 
 ### 直近で触らないもの
 
 - 無限ループ検知の正式実装
 - 固定磁石
-- 回転床
 - 極性反転
 - 磁力遮断壁
 - 豪華なパーティクル演出
@@ -96,15 +102,11 @@
 
 ## 次に完了させるべき状態
 
-PHASE_08 の最小実装はコード上では以下を満たす。
+PHASE_09_BASICPUSH のコード上の完了条件は満たした。
+次に完了させるべき状態は以下。
 
-1. 主要仕様に対応する確認面がある
-2. 各確認面の目的が明確である
-3. 基本押し、引力、反発、連鎖、強さ優先、同強度同時処理を確認できる
-4. Undo、Reset、レベル再読込を確認できる
-5. アニメーション中入力停止と連鎖順の可視性を確認できる
-6. 確認面が `levels/test/` で整理されている
-7. 新ギミック追加前後の回帰確認に使える
-8. 既存プレイフローを壊していない
+1. Godot エディタ上で PHASE_09 確認面を実プレイ確認する
+2. 新ギミック追加前後に既存回帰確認面と複数箱押し確認面を一通り確認する
+3. PHASE_10_ROTATION_GIMMICK に着手する
 
-残る確認は、Godot エディタ上で 11 面を実プレイして意図通り見えることを確認すること。
+PHASE_10_ROTATION_GIMMICK は PHASE_09 完了後に着手する。

@@ -1,0 +1,14 @@
+{
+  "id": "rule_multi_push_three_01",
+  "name": "03 Rule Multi Push Three",
+  "purpose": "three adjacent movable boxes use the same push-line logic",
+  "description": "3 個以上の可動箱でも、2 個押しの特例ではなく同じ押し列処理で 1 マス動くことを確認する。",
+  "tags": ["push", "multi_push"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P>>>G....#",
+    "#..........#",
+    "############"
+  ]
+}

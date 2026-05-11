@@ -21,36 +21,43 @@ func _init(
 
 
 func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
-	if state.cleared:
+	if state.cleared or dir == Vector2i.ZERO:
 		return null
 
 	var next_pos := state.player_pos + dir
+
+	if not state.is_inside_board(next_pos):
+		return null
 
 	if state.walls.has(next_pos):
 		return null
 
 	var body := state.get_body_at(next_pos)
-	var moved_body_id := -1
-	var pushed_body_from := Vector2i.ZERO
-	var pushed_body_to := Vector2i.ZERO
+	var pushed_body_moves: Array[Dictionary] = []
+	var primary_source_ids: Array[int] = []
 	var player_from := state.player_pos
 
 	if body != null:
-		if not body.movable:
+		var push_line := _build_push_line(state, next_pos, dir)
+		if push_line.is_empty():
 			return null
 
-		var push_to := next_pos + dir
+		var front_body: MagneticBodyState = push_line[push_line.size() - 1]
+		var push_to: Vector2i = front_body.pos + dir
 
 		if not state.is_cell_free(push_to):
 			return null
 
 		_undo_history.push(state)
 
-		pushed_body_from = body.pos
-		pushed_body_to = push_to
-		body.pos = push_to
+		pushed_body_moves = _build_body_move_events(push_line, dir)
+
+		for index in range(push_line.size() - 1, -1, -1):
+			var pushed_body: MagneticBodyState = push_line[index]
+			primary_source_ids.append(pushed_body.id)
+			pushed_body.pos += dir
+
 		state.player_pos = next_pos
-		moved_body_id = body.id
 		state.move_count += 1
 	else:
 		_undo_history.push(state)
@@ -70,21 +77,53 @@ func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
 		dir
 	))
 
-	if moved_body_id != -1:
+	for pushed_body_move in pushed_body_moves:
 		result.add_event(ActionEventScript.body_move(
 			move_phase,
-			moved_body_id,
-			pushed_body_from,
-			pushed_body_to,
+			pushed_body_move["body_id"] as int,
+			pushed_body_move["from"] as Vector2i,
+			pushed_body_move["to"] as Vector2i,
 			dir,
 			"push"
 		))
 
-	if moved_body_id != -1:
-		_magnet_resolver.apply_after_push(state, moved_body_id, dir, result)
+	if not primary_source_ids.is_empty():
+		_magnet_resolver.apply_after_push_sources(state, primary_source_ids, dir, result)
 
 	state.cleared = _win_checker.is_cleared(state)
 	result.did_clear = state.cleared
 	result.move_count_after = state.move_count
 	result.add_turn_end_event()
 	return result
+
+
+func _build_push_line(state: GameState, start_pos: Vector2i, dir: Vector2i) -> Array:
+	var push_line: Array = []
+	var cursor := start_pos
+
+	while state.is_inside_board(cursor):
+		var body := state.get_body_at(cursor)
+		if body == null:
+			break
+
+		if not body.movable:
+			return []
+
+		push_line.append(body)
+		cursor += dir
+
+	return push_line
+
+
+func _build_body_move_events(push_line: Array, dir: Vector2i) -> Array[Dictionary]:
+	var moves: Array[Dictionary] = []
+
+	for body in push_line:
+		var pushed_body := body as MagneticBodyState
+		moves.append({
+			"body_id": pushed_body.id,
+			"from": pushed_body.pos,
+			"to": pushed_body.pos + dir,
+		})
+
+	return moves

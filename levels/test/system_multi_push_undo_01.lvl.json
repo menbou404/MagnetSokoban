@@ -1,0 +1,14 @@
+{
+  "id": "system_multi_push_undo_01",
+  "name": "08 System Multi Push Undo",
+  "purpose": "undo restores a multi-push turn",
+  "description": "複数箱押し後に Undo して、プレイヤーと押し列の箱が初期状態へ戻ることを確認する。",
+  "tags": ["push", "multi_push", "undo", "system"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>>G....#",
+    "#.........#",
+    "###########"
+  ]
+}

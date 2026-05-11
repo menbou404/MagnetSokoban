@@ -1,0 +1,14 @@
+{
+  "id": "rule_multi_push_blocked_01",
+  "name": "04 Rule Multi Push Blocked",
+  "purpose": "push-line fails when the front cell is blocked",
+  "description": "押し列の先頭の次マスが壁の場合、複数箱押しが成立しないことを確認する。",
+  "tags": ["push", "multi_push", "blocked"],
+  "rows": [
+    "##########",
+    "#........#",
+    "#.P>>#...#",
+    "#........#",
+    "##########"
+  ]
+}

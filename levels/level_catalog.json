@@ -11,8 +11,71 @@
       "tags": ["push", "wall", "goal"]
     },
     {
+      "id": "rule_multi_push_01",
+      "name": "02 Rule Multi Push",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_01.lvl.json",
+      "purpose": "two adjacent movable boxes are pushed together",
+      "description": "隙間なく連続する 2 個の可動箱を、通常押しでまとめて 1 マス動かせることを確認する。",
+      "tags": ["push", "multi_push"]
+    },
+    {
+      "id": "rule_multi_push_three_01",
+      "name": "03 Rule Multi Push Three",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_three_01.lvl.json",
+      "purpose": "three adjacent movable boxes use the same push-line logic",
+      "description": "3 個以上の可動箱でも、2 個押しの特例ではなく同じ押し列処理で 1 マス動くことを確認する。",
+      "tags": ["push", "multi_push"]
+    },
+    {
+      "id": "rule_multi_push_blocked_01",
+      "name": "04 Rule Multi Push Blocked",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_blocked_01.lvl.json",
+      "purpose": "push-line fails when the front cell is blocked",
+      "description": "押し列の先頭の次マスが壁の場合、複数箱押しが成立しないことを確認する。",
+      "tags": ["push", "multi_push", "blocked"]
+    },
+    {
+      "id": "rule_multi_push_gap_01",
+      "name": "05 Rule Multi Push Gap",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_gap_01.lvl.json",
+      "purpose": "a gap breaks the push-line",
+      "description": "空きマスをまたいだ先の箱は同じ押し列に含まれないことを確認する。",
+      "tags": ["push", "multi_push", "gap"]
+    },
+    {
+      "id": "rule_multi_push_dual_sources_01",
+      "name": "06 Rule Multi Push Dual Sources",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_dual_sources_01.lvl.json",
+      "purpose": "all boxes moved by a push-line become primary magnet source candidates",
+      "description": "複数箱押しで同時に動いた箱のうち、前方側の箱も一次起点候補として磁力判定されることを確認する。",
+      "tags": ["push", "multi_push", "magnet", "source"]
+    },
+    {
+      "id": "rule_multi_push_then_magnet_01",
+      "name": "07 Rule Multi Push Then Magnet",
+      "group": "test",
+      "path": "res://levels/test/rule_multi_push_then_magnet_01.lvl.json",
+      "purpose": "magnet resolution runs after push-line movement",
+      "description": "押し列が成立した後に磁力処理へ進み、押しで同時に動いた箱が一次起点候補になることを確認する。",
+      "tags": ["push", "multi_push", "magnet"]
+    },
+    {
+      "id": "system_multi_push_undo_01",
+      "name": "08 System Multi Push Undo",
+      "group": "test",
+      "path": "res://levels/test/system_multi_push_undo_01.lvl.json",
+      "purpose": "undo restores a multi-push turn",
+      "description": "複数箱押し後に Undo して、プレイヤーと押し列の箱が初期状態へ戻ることを確認する。",
+      "tags": ["push", "multi_push", "undo", "system"]
+    },
+    {
       "id": "rule_attract_01",
-      "name": "02 Rule Attract",
+      "name": "09 Rule Attract",
       "group": "test",
       "path": "res://levels/test/rule_attract_01.lvl.json",
       "purpose": "basic attraction after pushing a stronger source magnet",
@@ -21,7 +84,7 @@
     },
     {
       "id": "rule_repel_01",
-      "name": "03 Rule Repel",
+      "name": "10 Rule Repel",
       "group": "test",
       "path": "res://levels/test/rule_repel_01.lvl.json",
       "purpose": "basic repulsion after pushing a stronger source magnet",
@@ -30,7 +93,7 @@
     },
     {
       "id": "rule_chain_01",
-      "name": "04 Rule Chain",
+      "name": "11 Rule Chain",
       "group": "test",
       "path": "res://levels/test/rule_chain_01.lvl.json",
       "purpose": "magnet chain from moved body to next source",
@@ -39,7 +102,7 @@
     },
     {
       "id": "rule_priority_01",
-      "name": "05 Rule Priority",
+      "name": "12 Rule Priority",
       "group": "test",
       "path": "res://levels/test/rule_priority_01.lvl.json",
       "purpose": "stronger magnet side has priority",
@@ -48,7 +111,7 @@
     },
     {
       "id": "rule_simultaneous_01",
-      "name": "06 Rule Simultaneous",
+      "name": "13 Rule Simultaneous",
       "group": "test",
       "path": "res://levels/test/rule_simultaneous_01.lvl.json",
       "purpose": "equal strength magnets move simultaneously",
@@ -57,7 +120,7 @@
     },
     {
       "id": "system_undo_01",
-      "name": "07 System Undo",
+      "name": "14 System Undo",
       "group": "test",
       "path": "res://levels/test/system_undo_01.lvl.json",
       "purpose": "undo restores positions, facing, strength, and move count",
@@ -66,7 +129,7 @@
     },
     {
       "id": "system_reset_01",
-      "name": "08 System Reset",
+      "name": "15 System Reset",
       "group": "test",
       "path": "res://levels/test/system_reset_01.lvl.json",
       "purpose": "reset reloads the current level from file",
@@ -75,7 +138,7 @@
     },
     {
       "id": "system_reload_01",
-      "name": "09 System Reload",
+      "name": "16 System Reload",
       "group": "test",
       "path": "res://levels/test/system_reload_01.lvl.json",
       "purpose": "next, previous, and reload keep using external level files",
@@ -84,7 +147,7 @@
     },
     {
       "id": "view_animation_lock_01",
-      "name": "10 View Animation Lock",
+      "name": "17 View Animation Lock",
       "group": "test",
       "path": "res://levels/test/view_animation_lock_01.lvl.json",
       "purpose": "input is ignored while one turn animation is playing",
@@ -93,7 +156,7 @@
     },
     {
       "id": "view_chain_readability_01",
-      "name": "11 View Chain Readability",
+      "name": "18 View Chain Readability",
       "group": "test",
       "path": "res://levels/test/view_chain_readability_01.lvl.json",
       "purpose": "chain order and trigger faces are readable",
