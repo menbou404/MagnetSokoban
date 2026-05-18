@@ -119,8 +119,62 @@
       "tags": ["rotation", "undo", "system"]
     },
     {
+      "id": "fixed_attract_01",
+      "name": "14 Fixed Attract",
+      "group": "test",
+      "path": "res://levels/test/fixed_attract_01.lvl.json",
+      "purpose": "a movable box is attracted toward a fixed magnet",
+      "description": "押された箱が固定磁石を対象に磁力判定し、固定磁石は動かず箱だけが近づくことを確認する。",
+      "tags": ["fixed_magnet", "attract", "magnet"]
+    },
+    {
+      "id": "fixed_repel_01",
+      "name": "15 Fixed Repel",
+      "group": "test",
+      "path": "res://levels/test/fixed_repel_01.lvl.json",
+      "purpose": "a movable box is repelled by a fixed magnet",
+      "description": "連鎖で動いた箱が固定磁石を対象に反発し、固定磁石は動かず箱だけが離れることを確認する。",
+      "tags": ["fixed_magnet", "repel", "magnet"]
+    },
+    {
+      "id": "fixed_block_push_01",
+      "name": "16 Fixed Block Push",
+      "group": "test",
+      "path": "res://levels/test/fixed_block_push_01.lvl.json",
+      "purpose": "a fixed magnet cannot be pushed and stops a push-line",
+      "description": "箱の押し先に固定磁石がある場合、通常押しが成立しないことを確認する。",
+      "tags": ["fixed_magnet", "push", "blocked"]
+    },
+    {
+      "id": "fixed_then_chain_01",
+      "name": "17 Fixed Then Chain",
+      "group": "test",
+      "path": "res://levels/test/fixed_then_chain_01.lvl.json",
+      "purpose": "a box moved by a fixed magnet interaction is re-evaluated as a chain source candidate",
+      "description": "固定磁石との相互作用で動いた箱が、同じ手の中で次の起点候補として再評価されることを確認する。",
+      "tags": ["fixed_magnet", "chain", "magnet"]
+    },
+    {
+      "id": "fixed_with_rotation_01",
+      "name": "18 Fixed With Rotation",
+      "group": "test",
+      "path": "res://levels/test/fixed_with_rotation_01.lvl.json",
+      "purpose": "a rotated box reacts to a fixed magnet using its updated facing",
+      "description": "回転床で上向き箱を右向きにした後、その向きで固定磁石に引力反応することを確認する。",
+      "tags": ["fixed_magnet", "rotation", "magnet"]
+    },
+    {
+      "id": "fixed_undo_01",
+      "name": "19 Fixed Undo",
+      "group": "test",
+      "path": "res://levels/test/fixed_undo_01.lvl.json",
+      "purpose": "undo restores a fixed-magnet interaction turn",
+      "description": "固定磁石との相互作用後に Undo して、箱の位置と向き、固定磁石の状態が初期状態へ戻ることを確認する。",
+      "tags": ["fixed_magnet", "undo", "system"]
+    },
+    {
       "id": "rule_attract_01",
-      "name": "14 Rule Attract",
+      "name": "20 Rule Attract",
       "group": "test",
       "path": "res://levels/test/rule_attract_01.lvl.json",
       "purpose": "basic attraction after pushing a stronger source magnet",
@@ -129,7 +183,7 @@
     },
     {
       "id": "rule_repel_01",
-      "name": "15 Rule Repel",
+      "name": "21 Rule Repel",
       "group": "test",
       "path": "res://levels/test/rule_repel_01.lvl.json",
       "purpose": "basic repulsion after pushing a stronger source magnet",
@@ -138,7 +192,7 @@
     },
     {
       "id": "rule_chain_01",
-      "name": "16 Rule Chain",
+      "name": "22 Rule Chain",
       "group": "test",
       "path": "res://levels/test/rule_chain_01.lvl.json",
       "purpose": "magnet chain from moved body to next source",
@@ -147,7 +201,7 @@
     },
     {
       "id": "rule_priority_01",
-      "name": "17 Rule Priority",
+      "name": "23 Rule Priority",
       "group": "test",
       "path": "res://levels/test/rule_priority_01.lvl.json",
       "purpose": "stronger magnet side has priority",
@@ -156,7 +210,7 @@
     },
     {
       "id": "rule_simultaneous_01",
-      "name": "18 Rule Simultaneous",
+      "name": "24 Rule Simultaneous",
       "group": "test",
       "path": "res://levels/test/rule_simultaneous_01.lvl.json",
       "purpose": "equal strength magnets move simultaneously",
@@ -165,7 +219,7 @@
     },
     {
       "id": "system_undo_01",
-      "name": "19 System Undo",
+      "name": "25 System Undo",
       "group": "test",
       "path": "res://levels/test/system_undo_01.lvl.json",
       "purpose": "undo restores positions, facing, strength, and move count",
@@ -174,7 +228,7 @@
     },
     {
       "id": "system_reset_01",
-      "name": "20 System Reset",
+      "name": "26 System Reset",
       "group": "test",
       "path": "res://levels/test/system_reset_01.lvl.json",
       "purpose": "reset reloads the current level from file",
@@ -183,7 +237,7 @@
     },
     {
       "id": "system_reload_01",
-      "name": "21 System Reload",
+      "name": "27 System Reload",
       "group": "test",
       "path": "res://levels/test/system_reload_01.lvl.json",
       "purpose": "next, previous, and reload keep using external level files",
@@ -192,7 +246,7 @@
     },
     {
       "id": "view_animation_lock_01",
-      "name": "22 View Animation Lock",
+      "name": "28 View Animation Lock",
       "group": "test",
       "path": "res://levels/test/view_animation_lock_01.lvl.json",
       "purpose": "input is ignored while one turn animation is playing",
@@ -201,7 +255,7 @@
     },
     {
       "id": "view_chain_readability_01",
-      "name": "23 View Chain Readability",
+      "name": "29 View Chain Readability",
       "group": "test",
       "path": "res://levels/test/view_chain_readability_01.lvl.json",
       "purpose": "chain order and trigger faces are readable",

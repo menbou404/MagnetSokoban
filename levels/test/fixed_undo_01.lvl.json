@@ -1,0 +1,17 @@
+{
+  "id": "fixed_undo_01",
+  "name": "19 Fixed Undo",
+  "purpose": "undo restores a fixed-magnet interaction turn",
+  "description": "固定磁石との相互作用後に Undo して、箱の位置と向き、固定磁石の状態が初期状態へ戻ることを確認する。",
+  "tags": ["fixed_magnet", "undo", "system"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>......#",
+    "#.........#",
+    "###########"
+  ],
+  "fixed_magnets": [
+    { "pos": [6, 2], "facing": "right", "strength": 3 }
+  ]
+}

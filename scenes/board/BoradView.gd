@@ -5,6 +5,8 @@ const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.g
 
 const FALLBACK_BOX_COLOR := Color("d19a66")
 const FALLBACK_BOX_ON_GOAL_COLOR := Color("98c379")
+const FALLBACK_FIXED_MAGNET_COLOR := Color("8f78d8")
+const FALLBACK_FIXED_MAGNET_BORDER_COLOR := Color("d9d1ff")
 const FALLBACK_PLAYER_COLOR := Color("61afef")
 const FALLBACK_WALL_COLOR := Color("5c6370")
 const FALLBACK_FLOOR_COLOR := Color("2b3245")
@@ -161,7 +163,9 @@ func _draw() -> void:
 			Vector2(cell_size, cell_size)
 		)
 
-		if state.goals.has(body.pos):
+		if body.is_fixed_magnet():
+			_draw_fixed_magnet(box_rect, body)
+		elif state.goals.has(body.pos):
 			_draw_box_on_goal(box_rect, body)
 		else:
 			_draw_box(box_rect, body)
@@ -246,6 +250,23 @@ func _draw_box_on_goal(rect: Rect2, body: MagneticBodyStateScript) -> void:
 		draw_texture_rect(tex_box, rect, false)
 	else:
 		draw_rect(rect.grow(-8), FALLBACK_BOX_ON_GOAL_COLOR)
+
+	_draw_pole_marker(rect, body)
+
+
+func _draw_fixed_magnet(rect: Rect2, body: MagneticBodyStateScript) -> void:
+	var body_rect := rect.grow(-7)
+	draw_rect(body_rect, FALLBACK_FIXED_MAGNET_BORDER_COLOR)
+	draw_rect(body_rect.grow(-4), FALLBACK_FIXED_MAGNET_COLOR)
+
+	var corner_size := rect.size.x * 0.18
+	for corner in [
+		body_rect.position,
+		body_rect.position + Vector2(body_rect.size.x - corner_size, 0),
+		body_rect.position + Vector2(0, body_rect.size.y - corner_size),
+		body_rect.position + body_rect.size - Vector2(corner_size, corner_size),
+	]:
+		draw_rect(Rect2(corner, Vector2(corner_size, corner_size)).grow(-2), FALLBACK_FLOOR_BORDER_COLOR)
 
 	_draw_pole_marker(rect, body)
 

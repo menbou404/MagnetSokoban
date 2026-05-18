@@ -8,6 +8,13 @@
 
 ## 2026-05-18
 
+### PHASE_11_FIXED_MAGNETS
+
+固定磁石を `MagneticBodyState` の `kind = fixed_magnet`、`movable = false` として追加した。
+`LevelLoader.gd` で `.lvl.json` の `fixed_magnets` 配列を読み込み、`MagnetResolver.gd` で固定磁石を磁力対象に含めつつ可動側だけを移動させるようにした。
+`BoardView.gd` に固定磁石の表示を追加し、引力、反発、押し停止、連鎖候補再評価、回転床連携、Undo の確認面を追加した。
+Godot headless 起動と PHASE_11 用スモーク確認を行った。
+
 ### PHASE_11_FIXED_MAGNETS マイルストーン追加
 
 `docs/milestones/PHASE_11_FIXED_MAGNETS.md` を追加した。

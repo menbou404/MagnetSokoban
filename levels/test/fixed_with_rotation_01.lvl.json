@@ -1,0 +1,17 @@
+{
+  "id": "fixed_with_rotation_01",
+  "name": "18 Fixed With Rotation",
+  "purpose": "a rotated box reacts to a fixed magnet using its updated facing",
+  "description": "回転床で上向き箱を右向きにした後、その向きで固定磁石に引力反応することを確認する。",
+  "tags": ["fixed_magnet", "rotation", "magnet"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P^]......#",
+    "#..........#",
+    "############"
+  ],
+  "fixed_magnets": [
+    { "pos": [7, 2], "facing": "right", "strength": 3 }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "fixed_repel_01",
+  "name": "15 Fixed Repel",
+  "purpose": "a movable box is repelled by a fixed magnet",
+  "description": "連鎖で動いた箱が固定磁石を対象に反発し、固定磁石は動かず箱だけが離れることを確認する。",
+  "tags": ["fixed_magnet", "repel", "magnet"],
+  "rows": [
+    "#############",
+    "#...........#",
+    "#.P5...>....#",
+    "#...........#",
+    "#############"
+  ],
+  "fixed_magnets": [
+    { "pos": [10, 2], "facing": "left", "strength": 3 }
+  ]
+}

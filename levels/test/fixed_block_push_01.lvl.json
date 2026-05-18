@@ -1,0 +1,17 @@
+{
+  "id": "fixed_block_push_01",
+  "name": "16 Fixed Block Push",
+  "purpose": "a fixed magnet cannot be pushed and stops a push-line",
+  "description": "箱の押し先に固定磁石がある場合、通常押しが成立しないことを確認する。",
+  "tags": ["fixed_magnet", "push", "blocked"],
+  "rows": [
+    "##########",
+    "#........#",
+    "#.P>.....#",
+    "#........#",
+    "##########"
+  ],
+  "fixed_magnets": [
+    { "pos": [4, 2], "facing": "right", "strength": 3 }
+  ]
+}

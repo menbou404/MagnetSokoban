@@ -1,0 +1,17 @@
+{
+  "id": "fixed_attract_01",
+  "name": "14 Fixed Attract",
+  "purpose": "a movable box is attracted toward a fixed magnet",
+  "description": "押された箱が固定磁石を対象に磁力判定し、固定磁石は動かず箱だけが近づくことを確認する。",
+  "tags": ["fixed_magnet", "attract", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P>......#",
+    "#.........#",
+    "###########"
+  ],
+  "fixed_magnets": [
+    { "pos": [6, 2], "facing": "right", "strength": 3 }
+  ]
+}

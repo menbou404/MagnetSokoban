@@ -38,6 +38,7 @@ levels/
 - `description`
 - `tags`
 - `rows`
+- `fixed_magnets`
 
 ## rows の文字
 
@@ -55,6 +56,16 @@ levels/
 - `s`: ゴール上の左向き箱
 - `]`: 右回転床
 - `[`: 左回転床
+
+## fixed_magnets 形式
+
+固定磁石は rows ではなく、レベル JSON の `fixed_magnets` 配列で管理する。
+
+主な項目:
+
+- `pos`: `[x, y]`
+- `facing`: `"right"` / `"left"` / `"up"` / `"down"`
+- `strength`: 1 以上の整数
 
 ## catalog 形式
 
@@ -92,6 +103,7 @@ levels/
 - 基本押し
 - 複数箱の通常押し
 - 回転床
+- 固定磁石
 - 引力
 - 反発
 - 連鎖
@@ -118,6 +130,12 @@ levels/
 - `rotation_then_attract_01`: 回転後の向きで引力判定が行われる
 - `rotation_then_repel_01`: 回転後の向きで反発判定が行われる
 - `rotation_undo_01`: 回転後の Undo で向きが戻る
+- `fixed_attract_01`: 固定磁石に対して箱が引力を受ける
+- `fixed_repel_01`: 固定磁石に対して箱が反発を受ける
+- `fixed_block_push_01`: 固定磁石が押せず、押し列を止める
+- `fixed_then_chain_01`: 固定磁石との相互作用で動いた箱が連鎖起点になる
+- `fixed_with_rotation_01`: 回転後の向きで固定磁石に反応する
+- `fixed_undo_01`: 固定磁石相互作用後の Undo
 - `rule_attract_01`: 引力
 - `rule_repel_01`: 反発
 - `rule_chain_01`: 連鎖

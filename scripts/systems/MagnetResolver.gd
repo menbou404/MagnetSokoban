@@ -44,17 +44,20 @@ func apply_after_push_sources(
 		processed_sources[source_id] = true
 
 	for moved_body_id in primary_moved_body_ids:
+		var force_reprocess := moved_body_id < 0
 		pending_sources.append({
-			"source_id": moved_body_id,
+			"source_id": abs(moved_body_id),
 			"direction": dir,
+			"force_reprocess": force_reprocess,
 		})
 
 	while not pending_sources.is_empty():
 		var current: Dictionary = pending_sources.pop_front()
 		var current_source_id := current["source_id"] as int
 		var current_direction := current["direction"] as Vector2i
+		var force_reprocess := current.get("force_reprocess", false) as bool
 
-		if processed_sources.has(current_source_id):
+		if processed_sources.has(current_source_id) and not force_reprocess:
 			continue
 
 		var source := state.get_body_by_id(current_source_id)
@@ -68,11 +71,13 @@ func apply_after_push_sources(
 			continue
 
 		for moved_body_id in moved_body_ids:
+			var moved_force_reprocess := moved_body_id < 0
 			# TODO: PHASE_05 以降で、連鎖時の起点ごとの処理方向を正式化する。
 			# PHASE_04 では、最初に押した方向を連鎖中も引き継ぐ。
 			pending_sources.append({
-				"source_id": moved_body_id,
+				"source_id": abs(moved_body_id),
 				"direction": current_direction,
+				"force_reprocess": moved_force_reprocess,
 			})
 
 
@@ -98,6 +103,9 @@ func _process_source_batch(
 	for source_id in source_ids:
 		var source := state.get_body_by_id(source_id)
 		if source == null:
+			continue
+
+		if not source.movable:
 			continue
 
 		var candidate := build_interaction_candidate(state, source, direction)
@@ -212,6 +220,17 @@ func resolve_interaction_candidate(
 	candidate: Dictionary,
 	turn_result: TurnResultScript
 ) -> Array[int]:
+	var source := state.get_body_by_id(candidate["source_id"] as int)
+	var target := state.get_body_by_id(candidate["target_id"] as int)
+	if source == null or target == null:
+		return _empty_body_id_list()
+
+	if not source.movable and not target.movable:
+		return _empty_body_id_list()
+
+	if source.movable != target.movable:
+		return _resolve_single_movable_interaction(state, candidate, turn_result)
+
 	var source_strength := candidate["source_strength"] as int
 	var target_strength := candidate["target_strength"] as int
 
@@ -291,21 +310,75 @@ func _resolve_stronger_interaction(
 	apply_planned_moves(state, planned_moves)
 	_add_body_move_event(turn_result, planned_move, candidate)
 	var moved_ids: Array[int] = []
-	moved_ids.append(planned_move["body_id"] as int)
+	var moved_body_id := planned_move["body_id"] as int
+	if moved_body_id == (candidate["source_id"] as int) and _candidate_has_fixed_magnet(state, candidate):
+		moved_body_id = -moved_body_id
+	moved_ids.append(moved_body_id)
+	return moved_ids
+
+
+func _resolve_single_movable_interaction(
+	state: GameState,
+	candidate: Dictionary,
+	turn_result: TurnResultScript
+) -> Array[int]:
+	var source := state.get_body_by_id(candidate["source_id"] as int)
+	var target := state.get_body_by_id(candidate["target_id"] as int)
+	if source == null or target == null:
+		return _empty_body_id_list()
+
+	var planned_move := {}
+	if source.movable:
+		planned_move = _plan_source_move(state, candidate)
+	elif target.movable:
+		planned_move = _plan_target_move(state, candidate)
+
+	if planned_move.is_empty():
+		return _empty_body_id_list()
+
+	var planned_moves: Array[Dictionary] = []
+	planned_moves.append(planned_move)
+	if not _are_planned_moves_valid(state, planned_moves):
+		return _empty_body_id_list()
+
+	apply_planned_moves(state, planned_moves)
+	_add_body_move_event(turn_result, planned_move, candidate)
+	var moved_ids: Array[int] = []
+	var moved_body_id := planned_move["body_id"] as int
+	if moved_body_id == (candidate["source_id"] as int) and _candidate_has_fixed_magnet(state, candidate):
+		moved_body_id = -moved_body_id
+	moved_ids.append(moved_body_id)
 	return moved_ids
 
 
 func _plan_candidate_first_step(state: GameState, candidate: Dictionary) -> Array[Dictionary]:
 	var planned_moves: Array[Dictionary] = []
+	var source := state.get_body_by_id(candidate["source_id"] as int)
+	var target := state.get_body_by_id(candidate["target_id"] as int)
+	if source == null or target == null:
+		return planned_moves
+
+	if not source.movable and not target.movable:
+		return planned_moves
+
+	if source.movable != target.movable:
+		var single_move := {}
+		if source.movable:
+			single_move = _plan_source_move(state, candidate)
+		else:
+			single_move = _plan_target_move(state, candidate)
+
+		if single_move.is_empty():
+			return planned_moves
+
+		single_move["reason"] = candidate["interaction_type"] as String
+		planned_moves.append(single_move)
+		return planned_moves
+
 	var source_strength := candidate["source_strength"] as int
 	var target_strength := candidate["target_strength"] as int
 
 	if source_strength == target_strength:
-		var source := state.get_body_by_id(candidate["source_id"] as int)
-		var target := state.get_body_by_id(candidate["target_id"] as int)
-		if source == null or target == null:
-			return planned_moves
-
 		var interaction_type := candidate["interaction_type"] as String
 		var direction := candidate["direction"] as Vector2i
 		var source_move := _plan_single_step_move(
@@ -639,6 +712,16 @@ func _collect_unique_source_ids(source_ids: Array[int]) -> Array[int]:
 	for source_id in source_ids:
 		_append_unique_body_id(unique_ids, source_id)
 	return unique_ids
+
+
+func _candidate_has_fixed_magnet(state: GameState, candidate: Dictionary) -> bool:
+	var source := state.get_body_by_id(candidate["source_id"] as int)
+	var target := state.get_body_by_id(candidate["target_id"] as int)
+	if source != null and source.is_fixed_magnet():
+		return true
+	if target != null and target.is_fixed_magnet():
+		return true
+	return false
 
 
 func _empty_body_id_list() -> Array[int]:

@@ -2,6 +2,7 @@ class_name MagneticBodyState
 extends RefCounted
 
 const KIND_BOX := "box"
+const KIND_FIXED_MAGNET := "fixed_magnet"
 
 const POLE_N := "N"
 const POLE_S := "S"
@@ -84,3 +85,7 @@ func get_pole_on_face(face_direction: Vector2i) -> String:
 
 func get_opposite_face(face_direction: Vector2i) -> Vector2i:
 	return -face_direction
+
+
+func is_fixed_magnet() -> bool:
+	return kind == KIND_FIXED_MAGNET

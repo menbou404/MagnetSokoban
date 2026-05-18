@@ -92,7 +92,7 @@ func load_state_from_file(path: String) -> GameState:
 	if level_data.is_empty():
 		return null
 
-	return load_from_rows(_rows_from_level_data(level_data))
+	return load_from_level_data(level_data)
 
 
 func load_catalog(path: String = DEFAULT_CATALOG_PATH) -> Dictionary:
@@ -167,7 +167,26 @@ func load_state_from_entry(entry: Dictionary) -> GameState:
 	if level_data.is_empty():
 		return null
 
-	return load_from_rows(_rows_from_level_data(level_data))
+	return load_from_level_data(level_data)
+
+
+func load_from_level_data(level_data: Dictionary) -> GameState:
+	var state := load_from_rows(_rows_from_level_data(level_data))
+	var next_body_id := _get_next_body_id(state)
+	var fixed_magnets := level_data.get("fixed_magnets", []) as Array
+
+	for source_fixed_magnet in fixed_magnets:
+		var fixed_magnet := source_fixed_magnet as Dictionary
+		if fixed_magnet.is_empty():
+			continue
+
+		var pos := _vector2i_from_array(fixed_magnet.get("pos", []))
+		var facing := _facing_from_string(fixed_magnet.get("facing", "right") as String)
+		var strength := fixed_magnet.get("strength", DEFAULT_BOX_STRENGTH) as int
+		state.bodies.append(_create_fixed_magnet(next_body_id, pos, facing, strength))
+		next_body_id += 1
+
+	return state
 
 
 func load_level_by_id(
@@ -202,6 +221,22 @@ func _create_box(
 	)
 
 
+func _create_fixed_magnet(
+	body_id: int,
+	pos: Vector2i,
+	facing: Vector2i,
+	strength: int
+) -> MagneticBodyStateScript:
+	return MagneticBodyStateScript.new(
+		body_id,
+		MagneticBodyStateScript.KIND_FIXED_MAGNET,
+		pos,
+		facing,
+		strength,
+		false
+	)
+
+
 func _get_max_row_width(rows: Array[String]) -> int:
 	var width := 0
 	for row in rows:
@@ -217,6 +252,33 @@ func _rows_from_level_data(level_data: Dictionary) -> Array[String]:
 		rows.append(row as String)
 
 	return rows
+
+
+func _get_next_body_id(state: GameState) -> int:
+	var next_body_id := 1
+	for body in state.bodies:
+		next_body_id = maxi(next_body_id, body.id + 1)
+	return next_body_id
+
+
+func _vector2i_from_array(value: Variant) -> Vector2i:
+	var array_value := value as Array
+	if array_value.size() < 2:
+		return Vector2i.ZERO
+
+	return Vector2i(array_value[0] as int, array_value[1] as int)
+
+
+func _facing_from_string(value: String) -> Vector2i:
+	match value:
+		"left":
+			return Vector2i.LEFT
+		"up":
+			return Vector2i.UP
+		"down":
+			return Vector2i.DOWN
+		_:
+			return Vector2i.RIGHT
 
 
 func _normalize_catalog_entry(entry: Dictionary) -> Dictionary:

@@ -54,6 +54,14 @@ func get_body_by_id(body_id: int) -> MagneticBodyStateScript:
 	return null
 
 
+func get_fixed_magnets() -> Array[MagneticBodyStateScript]:
+	var fixed_magnets: Array[MagneticBodyStateScript] = []
+	for body in bodies:
+		if body.is_fixed_magnet():
+			fixed_magnets.append(body)
+	return fixed_magnets
+
+
 func is_inside_board(pos: Vector2i) -> bool:
 	return pos.x >= 0 and pos.x < board_size.x and pos.y >= 0 and pos.y < board_size.y
 

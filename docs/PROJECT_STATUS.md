@@ -56,18 +56,21 @@
 - PHASE_10_ROTATION_GIMMICK の最小実装
 - 右回転床 / 左回転床のレベル読込、論理回転、表示対応
 - 回転後の向きで磁力判定を行う確認面の追加
+- PHASE_11_FIXED_MAGNETS の最小実装
+- 固定磁石のレベル読込、非可動磁力物体としての保持、表示対応
+- 固定磁石に対する引力 / 反発、押し停止、回転床連携の確認面追加
 
 ### 現在地
 
-仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS、PHASE_09_BASICPUSH、PHASE_10_ROTATION_GIMMICK の最小実装は完了。
+仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS、PHASE_09_BASICPUSH、PHASE_10_ROTATION_GIMMICK、PHASE_11_FIXED_MAGNETS の最小実装は完了。
 箱は `MagneticBodyState` により、位置・向き・強さ・可動性を持つ磁力物体として保持されている。  
 箱を押した直後にだけ、押された箱を起点として直線探索、距離判定、引力 / 反発、連鎖処理を行う。
 競合解決では、強さが異なる場合に強い側を優先し、同強度の場合は両者を 1 マスずつ同時に動かす。
 1 手の結果は `TurnResult` / `ActionEvent` のイベント列として生成され、`AnimationDirector` が `BoardView` の表示専用状態を使って phase 順に再生する。
 再生中は新しい入力を受け付けない。
-確認用レベルは `levels/test/` の `.lvl.json` として 23 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
+確認用レベルは `levels/test/` の `.lvl.json` として 29 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
-次は Godot エディタ上で回帰確認面、複数箱押し確認面、回転床確認面を実プレイ確認しつつ、PHASE_11_FIXED_MAGNETS に進む段階である。
+次は Godot エディタ上で回帰確認面、複数箱押し確認面、回転床確認面、固定磁石確認面を実プレイ確認する段階である。
 文書は圧縮済みで、基本の読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
 着手フェーズの詳細は `docs/milestones/PHASE_*.md` を読む。
 
@@ -75,9 +78,9 @@
 
 ### 直近の最優先
 
-1. Godot エディタ上で 23 面の確認セットを実プレイ確認する
+1. Godot エディタ上で 29 面の確認セットを実プレイ確認する
 2. 新ギミック追加前後に `levels/test/` の確認面を一通り確認する運用を定着させる
-3. PHASE_11_FIXED_MAGNETS に着手する
+3. 次の正式フェーズを決める
 
 ### 直近で触らないもの
 
@@ -105,13 +108,9 @@
 
 ## 次に完了させるべき状態
 
-PHASE_11_FIXED_MAGNETS で次に完了させるべき状態は以下。
+PHASE_11_FIXED_MAGNETS のコード上の完了条件は満たした。
+次に完了させるべき状態は以下。
 
-1. 固定磁石をレベルに配置できる
-2. 固定磁石が押せない
-3. 固定磁石が通常押し列を止める
-4. 固定磁石が磁力判定に参加する
-5. 箱が固定磁石に対して引力・反発を受ける
-6. 固定磁石自身は動かない
-7. 回転床と組み合わせてもルールが破綻しない
-8. 専用確認面で意図通り動作する
+1. Godot エディタ上で PHASE_11 確認面を実プレイ確認する
+2. 既存回帰確認面、複数箱押し確認面、回転床確認面、固定磁石確認面を一通り確認する
+3. 次の正式フェーズ文書を作る
