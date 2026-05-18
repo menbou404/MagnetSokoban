@@ -6,6 +6,14 @@
 
 新しい記録は上に追加する。
 
+## 2026-05-18
+
+### PHASE_11_FIXED_MAGNETS マイルストーン追加
+
+`docs/milestones/PHASE_11_FIXED_MAGNETS.md` を追加した。
+`PHASES.md` と `PROJECT_STATUS.md` を更新し、次フェーズを PHASE_11_FIXED_MAGNETS として整理した。
+`docs/PHASE_11.md` を追加し、固定磁石の予定仕様、処理順、責務を要約した。
+
 ## 2026-05-12
 
 ### PHASE_10_ROTATION_GIMMICK
