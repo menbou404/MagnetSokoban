@@ -57,6 +57,8 @@ func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
 			primary_source_ids.append(pushed_body.id)
 			pushed_body.pos += dir
 
+		_apply_rotation_tiles(state, push_line)
+
 		state.player_pos = next_pos
 		state.move_count += 1
 	else:
@@ -127,3 +129,37 @@ func _build_body_move_events(push_line: Array, dir: Vector2i) -> Array[Dictionar
 		})
 
 	return moves
+
+
+func _apply_rotation_tiles(state: GameState, moved_bodies: Array) -> void:
+	for body in moved_bodies:
+		var moved_body := body as MagneticBodyState
+		var rotation := state.get_rotation_at(moved_body.pos)
+		if rotation == "":
+			continue
+
+		moved_body.facing = _rotate_facing(moved_body.facing, rotation)
+
+
+func _rotate_facing(facing: Vector2i, rotation: String) -> Vector2i:
+	if rotation == "right":
+		if facing == Vector2i.UP:
+			return Vector2i.RIGHT
+		if facing == Vector2i.RIGHT:
+			return Vector2i.DOWN
+		if facing == Vector2i.DOWN:
+			return Vector2i.LEFT
+		if facing == Vector2i.LEFT:
+			return Vector2i.UP
+
+	if rotation == "left":
+		if facing == Vector2i.UP:
+			return Vector2i.LEFT
+		if facing == Vector2i.LEFT:
+			return Vector2i.DOWN
+		if facing == Vector2i.DOWN:
+			return Vector2i.RIGHT
+		if facing == Vector2i.RIGHT:
+			return Vector2i.UP
+
+	return facing

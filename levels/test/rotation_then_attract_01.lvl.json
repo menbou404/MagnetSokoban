@@ -1,0 +1,14 @@
+{
+  "id": "rotation_then_attract_01",
+  "name": "11 Rotation Then Attract",
+  "purpose": "magnet attraction uses the facing after rotation",
+  "description": "右回転床で上向き箱を右向きにしてから、回転後の面で引力が発動することを確認する。",
+  "tags": ["rotation", "attract", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P^]..>..#",
+    "#.........#",
+    "###########"
+  ]
+}

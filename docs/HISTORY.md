@@ -8,6 +8,13 @@
 
 ## 2026-05-12
 
+### PHASE_10_ROTATION_GIMMICK
+
+箱が入ると向きを 90 度変える右回転床 / 左回転床を追加した。
+`GameState.gd` に回転床位置を保持し、`LevelLoader.gd` で `]` / `[` を読み込み、`MoveResolver.gd` で箱移動確定後かつ磁力処理前に facing を更新するようにした。
+`BoardView.gd` に回転床の簡易表示を追加し、回転、回転後の引力 / 反発、Undo を確認する 5 面を `levels/test/` と catalog に追加した。
+Godot headless 起動と PHASE_10 用スモーク確認を行った。
+
 ### PHASE_09_BASICPUSH
 
 `MoveResolver.gd` の通常押しを押し列処理へ拡張し、隙間なく連続する複数の可動箱をまとめて 1 マス押せるようにした。

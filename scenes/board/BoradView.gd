@@ -10,6 +10,8 @@ const FALLBACK_WALL_COLOR := Color("5c6370")
 const FALLBACK_FLOOR_COLOR := Color("2b3245")
 const FALLBACK_FLOOR_BORDER_COLOR := Color("1f2430")
 const FALLBACK_GOAL_COLOR := Color("f2c94c")
+const ROTATE_RIGHT_TILE_COLOR := Color(0.35, 0.85, 0.75, 0.85)
+const ROTATE_LEFT_TILE_COLOR := Color(0.85, 0.58, 0.35, 0.85)
 
 const POLE_N_COLOR := Color(0.95, 0.35, 0.35, 0.95)
 const POLE_S_COLOR := Color(0.35, 0.55, 1.0, 0.95)
@@ -141,6 +143,11 @@ func _draw() -> void:
 
 			_draw_floor_cell(rect)
 
+			if state.rotate_right_tiles.has(pos):
+				_draw_rotation_tile(rect, true)
+			elif state.rotate_left_tiles.has(pos):
+				_draw_rotation_tile(rect, false)
+
 			if state.goals.has(pos):
 				_draw_goal_cell(rect)
 
@@ -179,6 +186,41 @@ func _draw_goal_cell(rect: Rect2) -> void:
 		draw_texture_rect(tex_goal, rect, false)
 	else:
 		draw_rect(rect.grow(-18), FALLBACK_GOAL_COLOR)
+
+
+func _draw_rotation_tile(rect: Rect2, rotate_right: bool) -> void:
+	var color := ROTATE_RIGHT_TILE_COLOR
+	if not rotate_right:
+		color = ROTATE_LEFT_TILE_COLOR
+
+	draw_rect(rect.grow(-12), Color(color.r, color.g, color.b, 0.14))
+
+	var center := rect.get_center()
+	var radius := rect.size.x * 0.24
+	var start_angle := -PI * 0.65
+	var end_angle := PI * 0.65
+
+	if rotate_right:
+		draw_arc(center, radius, end_angle, start_angle, 18, color, 3.0)
+		var tip := center + Vector2(cos(start_angle), sin(start_angle)) * radius
+		_draw_arrow_head(tip, -Vector2(cos(start_angle), sin(start_angle)), color)
+	else:
+		draw_arc(center, radius, start_angle, end_angle, 18, color, 3.0)
+		var tip := center + Vector2(cos(end_angle), sin(end_angle)) * radius
+		_draw_arrow_head(tip, Vector2(cos(end_angle), sin(end_angle)), color)
+
+
+func _draw_arrow_head(tip: Vector2, direction: Vector2, color: Color) -> void:
+	if direction == Vector2.ZERO:
+		return
+
+	var forward := direction.normalized()
+	var side := Vector2(-forward.y, forward.x)
+	var size := 7.0
+	var p1 := tip
+	var p2 := tip - forward * size + side * (size * 0.55)
+	var p3 := tip - forward * size - side * (size * 0.55)
+	draw_colored_polygon(PackedVector2Array([p1, p2, p3]), color)
 
 
 func _draw_wall_cell(rect: Rect2) -> void:

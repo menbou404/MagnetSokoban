@@ -21,6 +21,10 @@ func load_from_rows(rows: Array[String]) -> GameState:
 			match ch:
 				"#":
 					state.walls[pos] = true
+				"]":
+					state.rotate_right_tiles[pos] = true
+				"[":
+					state.rotate_left_tiles[pos] = true
 				"G":
 					state.goals[pos] = true
 				"P":

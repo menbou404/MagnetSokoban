@@ -6,6 +6,8 @@ const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.g
 var board_size := Vector2i.ZERO
 var walls := {}
 var goals := {}
+var rotate_right_tiles := {}
+var rotate_left_tiles := {}
 
 var player_pos := Vector2i.ZERO
 var bodies: Array[MagneticBodyStateScript] = []
@@ -58,6 +60,16 @@ func is_inside_board(pos: Vector2i) -> bool:
 
 func is_wall(pos: Vector2i) -> bool:
 	return walls.has(pos)
+
+
+func get_rotation_at(pos: Vector2i) -> String:
+	if rotate_right_tiles.has(pos):
+		return "right"
+
+	if rotate_left_tiles.has(pos):
+		return "left"
+
+	return ""
 
 
 func is_cell_free(pos: Vector2i, ignore_body_id: int = -1) -> bool:

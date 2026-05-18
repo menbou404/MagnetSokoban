@@ -53,6 +53,8 @@ levels/
 - `1` から `5`: 強さ付き右向き箱
 - `n`: ゴール上の右向き箱
 - `s`: ゴール上の左向き箱
+- `]`: 右回転床
+- `[`: 左回転床
 
 ## catalog 形式
 
@@ -89,6 +91,7 @@ levels/
 
 - 基本押し
 - 複数箱の通常押し
+- 回転床
 - 引力
 - 反発
 - 連鎖
@@ -110,6 +113,11 @@ levels/
 - `rule_multi_push_dual_sources_01`: 押しで同時に動いた箱が一次起点候補になる
 - `rule_multi_push_then_magnet_01`: 押し列成立後に磁力処理へ進む
 - `system_multi_push_undo_01`: 複数箱押し後の Undo
+- `rotation_right_01`: 右回転床で箱が 90 度右回転する
+- `rotation_left_01`: 左回転床で箱が 90 度左回転する
+- `rotation_then_attract_01`: 回転後の向きで引力判定が行われる
+- `rotation_then_repel_01`: 回転後の向きで反発判定が行われる
+- `rotation_undo_01`: 回転後の Undo で向きが戻る
 - `rule_attract_01`: 引力
 - `rule_repel_01`: 反発
 - `rule_chain_01`: 連鎖

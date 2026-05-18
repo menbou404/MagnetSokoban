@@ -1,0 +1,14 @@
+{
+  "id": "rotation_undo_01",
+  "name": "13 Rotation Undo",
+  "purpose": "undo restores facing after rotation",
+  "description": "回転床で向きが変わった後に Undo して、位置と向きが初期状態へ戻ることを確認する。",
+  "tags": ["rotation", "undo", "system"],
+  "rows": [
+    "##########",
+    "#........#",
+    "#.P^]....#",
+    "#........#",
+    "##########"
+  ]
+}

@@ -74,8 +74,53 @@
       "tags": ["push", "multi_push", "undo", "system"]
     },
     {
+      "id": "rotation_right_01",
+      "name": "09 Rotation Right",
+      "group": "test",
+      "path": "res://levels/test/rotation_right_01.lvl.json",
+      "purpose": "a box rotates 90 degrees right when entering a right rotation tile",
+      "description": "上向き箱を右回転床へ押し込み、向きが右へ変わることを確認する。",
+      "tags": ["rotation", "rotate_right", "push"]
+    },
+    {
+      "id": "rotation_left_01",
+      "name": "10 Rotation Left",
+      "group": "test",
+      "path": "res://levels/test/rotation_left_01.lvl.json",
+      "purpose": "a box rotates 90 degrees left when entering a left rotation tile",
+      "description": "上向き箱を左回転床へ押し込み、向きが左へ変わることを確認する。",
+      "tags": ["rotation", "rotate_left", "push"]
+    },
+    {
+      "id": "rotation_then_attract_01",
+      "name": "11 Rotation Then Attract",
+      "group": "test",
+      "path": "res://levels/test/rotation_then_attract_01.lvl.json",
+      "purpose": "magnet attraction uses the facing after rotation",
+      "description": "右回転床で上向き箱を右向きにしてから、回転後の面で引力が発動することを確認する。",
+      "tags": ["rotation", "attract", "magnet"]
+    },
+    {
+      "id": "rotation_then_repel_01",
+      "name": "12 Rotation Then Repel",
+      "group": "test",
+      "path": "res://levels/test/rotation_then_repel_01.lvl.json",
+      "purpose": "magnet repulsion uses the facing after rotation",
+      "description": "右回転床で上向き箱を右向きにしてから、回転後の面で反発判定が発生することを確認する。",
+      "tags": ["rotation", "repel", "magnet"]
+    },
+    {
+      "id": "rotation_undo_01",
+      "name": "13 Rotation Undo",
+      "group": "test",
+      "path": "res://levels/test/rotation_undo_01.lvl.json",
+      "purpose": "undo restores facing after rotation",
+      "description": "回転床で向きが変わった後に Undo して、位置と向きが初期状態へ戻ることを確認する。",
+      "tags": ["rotation", "undo", "system"]
+    },
+    {
       "id": "rule_attract_01",
-      "name": "09 Rule Attract",
+      "name": "14 Rule Attract",
       "group": "test",
       "path": "res://levels/test/rule_attract_01.lvl.json",
       "purpose": "basic attraction after pushing a stronger source magnet",
@@ -84,7 +129,7 @@
     },
     {
       "id": "rule_repel_01",
-      "name": "10 Rule Repel",
+      "name": "15 Rule Repel",
       "group": "test",
       "path": "res://levels/test/rule_repel_01.lvl.json",
       "purpose": "basic repulsion after pushing a stronger source magnet",
@@ -93,7 +138,7 @@
     },
     {
       "id": "rule_chain_01",
-      "name": "11 Rule Chain",
+      "name": "16 Rule Chain",
       "group": "test",
       "path": "res://levels/test/rule_chain_01.lvl.json",
       "purpose": "magnet chain from moved body to next source",
@@ -102,7 +147,7 @@
     },
     {
       "id": "rule_priority_01",
-      "name": "12 Rule Priority",
+      "name": "17 Rule Priority",
       "group": "test",
       "path": "res://levels/test/rule_priority_01.lvl.json",
       "purpose": "stronger magnet side has priority",
@@ -111,7 +156,7 @@
     },
     {
       "id": "rule_simultaneous_01",
-      "name": "13 Rule Simultaneous",
+      "name": "18 Rule Simultaneous",
       "group": "test",
       "path": "res://levels/test/rule_simultaneous_01.lvl.json",
       "purpose": "equal strength magnets move simultaneously",
@@ -120,7 +165,7 @@
     },
     {
       "id": "system_undo_01",
-      "name": "14 System Undo",
+      "name": "19 System Undo",
       "group": "test",
       "path": "res://levels/test/system_undo_01.lvl.json",
       "purpose": "undo restores positions, facing, strength, and move count",
@@ -129,7 +174,7 @@
     },
     {
       "id": "system_reset_01",
-      "name": "15 System Reset",
+      "name": "20 System Reset",
       "group": "test",
       "path": "res://levels/test/system_reset_01.lvl.json",
       "purpose": "reset reloads the current level from file",
@@ -138,7 +183,7 @@
     },
     {
       "id": "system_reload_01",
-      "name": "16 System Reload",
+      "name": "21 System Reload",
       "group": "test",
       "path": "res://levels/test/system_reload_01.lvl.json",
       "purpose": "next, previous, and reload keep using external level files",
@@ -147,7 +192,7 @@
     },
     {
       "id": "view_animation_lock_01",
-      "name": "17 View Animation Lock",
+      "name": "22 View Animation Lock",
       "group": "test",
       "path": "res://levels/test/view_animation_lock_01.lvl.json",
       "purpose": "input is ignored while one turn animation is playing",
@@ -156,7 +201,7 @@
     },
     {
       "id": "view_chain_readability_01",
-      "name": "18 View Chain Readability",
+      "name": "23 View Chain Readability",
       "group": "test",
       "path": "res://levels/test/view_chain_readability_01.lvl.json",
       "purpose": "chain order and trigger faces are readable",

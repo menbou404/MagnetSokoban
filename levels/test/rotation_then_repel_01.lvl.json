@@ -1,0 +1,14 @@
+{
+  "id": "rotation_then_repel_01",
+  "name": "12 Rotation Then Repel",
+  "purpose": "magnet repulsion uses the facing after rotation",
+  "description": "右回転床で上向き箱を右向きにしてから、回転後の面で反発判定が発生することを確認する。",
+  "tags": ["rotation", "repel", "magnet"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P^]..<..#",
+    "#.........#",
+    "###########"
+  ]
+}

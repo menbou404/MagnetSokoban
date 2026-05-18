@@ -1,0 +1,14 @@
+{
+  "id": "rotation_right_01",
+  "name": "09 Rotation Right",
+  "purpose": "a box rotates 90 degrees right when entering a right rotation tile",
+  "description": "上向き箱を右回転床へ押し込み、向きが右へ変わることを確認する。",
+  "tags": ["rotation", "rotate_right", "push"],
+  "rows": [
+    "##########",
+    "#........#",
+    "#.P^]....#",
+    "#........#",
+    "##########"
+  ]
+}
