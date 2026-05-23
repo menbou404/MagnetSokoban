@@ -6,6 +6,19 @@
 
 新しい記録は上に追加する。
 
+## 2026-05-23
+
+### milestones 内整理
+
+`docs/milestones/` を `active/`、`planned/`、`completed/` に分け、完了済みの `PHASE_09_BASICPUSH.md`、`PHASE_10_ROTATION_GIMMICK.md`、`PHASE_11_FIXED_MAGNETS.md` を `completed/` へ移動した。
+各状態ディレクトリに README を追加し、`docs/milestones/README.md`、`docs/README.md`、`docs/PHASES.md`、`docs/PROJECT_STATUS.md`、`AGENTS.md` の参照を新構成に更新した。
+
+### フェーズ文書整理
+
+`docs/PHASE_09.md`、`docs/PHASE_10.md`、`docs/PHASE_11.md` の内容は各 `docs/milestones/PHASE_*.md` と重複していたため削除し、フェーズ詳細の置き場を `docs/milestones/` に統一した。
+`docs/milestones/README.md` を追加し、フェーズ詳細文書の一覧、状態、運用ルールをまとめた。
+`docs/README.md`、`docs/PHASES.md`、`docs/PROJECT_STATUS.md`、`AGENTS.md` を更新し、今後はルート直下に `PHASE_XX.md` を増やさない方針を明記した。
+
 ## 2026-05-18
 
 ### PHASE_11_FIXED_MAGNETS

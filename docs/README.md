@@ -13,7 +13,7 @@
 5. `PHASES.md`
 6. `HISTORY.md`
 
-着手対象が決まっている場合は、対応する `milestones/PHASE_*.md` も読む。
+着手対象が決まっている場合は、`milestones/README.md` と対応する `milestones/active/PHASE_*.md` または `milestones/planned/PHASE_*.md` も読む。
 
 ## 文書の役割
 
@@ -36,15 +36,15 @@
 
 ### `PHASES.md`
 
-フェーズ別マイルストーンの概要をまとめる。
+フェーズ別マイルストーンの概要と、詳細文書への入口をまとめる。
 
-### `PHASE_*.md`
+### `milestones/README.md`
 
-フェーズで正式化済み、または次に正式化予定の仕様要点をまとめる。
+フェーズ詳細文書の一覧、状態、運用ルールをまとめる。
 
-### `milestones/PHASE_*.md`
+### `milestones/{active,planned,completed}/PHASE_*.md`
 
-これから着手するフェーズの詳細な目的、対象、完了条件をまとめる。
+`active/`、`planned/`、`completed/` に分け、進行状態ごとにフェーズ詳細を管理する。
 
 ### `HISTORY.md`
 

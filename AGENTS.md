@@ -20,7 +20,8 @@
 
 必要に応じて以下も読むこと。
 
-- 着手対象に対応する `docs/milestones/PHASE_*.md`
+- `docs/milestones/README.md`
+- 着手対象に対応する `docs/milestones/active/PHASE_*.md` または `docs/milestones/planned/PHASE_*.md`
 - 必要に応じて、過去の git 差分
 
 ## 基本ルール

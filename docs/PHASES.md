@@ -3,7 +3,8 @@
 ## 目的
 
 フェーズ別マイルストーンの概要を管理する。
-詳細な作業指示が必要なフェーズは `milestones/PHASE_*.md` に分ける。
+詳細な作業指示が必要なフェーズは `milestones/active/`、`milestones/planned/`、`milestones/completed/` 配下の `PHASE_*.md` に分ける。
+詳細文書の一覧と運用ルールは `milestones/README.md` を正とする。
 
 ## 完了済み
 
@@ -48,22 +49,21 @@ Godot 4 + VS Code + Git の開発環境、最小シーン、描画分離の土�
 
 ### PHASE_09_BASICPUSH
 
-詳細: `milestones/PHASE_09_BASICPUSH.md`
+詳細: `milestones/completed/PHASE_09_BASICPUSH.md`
 
 通常押しギミックを拡張し、隙間なく連続する複数の可動箱を 1 つの押し列として 1 マス押せるようにする。
 磁力ではなく `MoveResolver.gd` の通常移動ルールとして扱い、押しで同時に動いた箱をすべて一次起点候補として `MagnetResolver.gd` に渡す。
 
 ### PHASE_10_ROTATION_GIMMICK
 
-詳細: `milestones/PHASE_10_ROTATION_GIMMICK.md`
+詳細: `milestones/completed/PHASE_10_ROTATION_GIMMICK.md`
 
 箱の向きを変える最初の正式ギミックとして、右回転床 / 左回転床を追加する。
 箱が回転床へ入った直後に向きを更新し、その後の磁力判定へ反映する。
 
 ### PHASE_11_FIXED_MAGNETS
 
-概要: `PHASE_11.md`
-詳細: `milestones/PHASE_11_FIXED_MAGNETS.md`
+詳細: `milestones/completed/PHASE_11_FIXED_MAGNETS.md`
 
 盤面上に移動しない磁力物体である固定磁石を追加する。
 固定磁石は箱と同じく向きと強さを持つが、押しても磁力でも動かず、箱との相互作用では可動側だけを移動対象にする。
@@ -81,5 +81,6 @@ Godot 4 + VS Code + Git の開発環境、最小シーン、描画分離の土�
 ## 運用
 
 新しいフェーズを始める前に、この文書へ概要を追記する。
-詳細な作業範囲が必要な場合は `milestones/PHASE_*.md` を追加する。
+詳細な作業範囲が必要な場合は `milestones/active/PHASE_*.md` または `milestones/planned/PHASE_*.md` を追加し、`milestones/README.md` の一覧も更新する。
+ルート直下に `PHASE_XX.md` は増やさず、フェーズ詳細は `docs/milestones/` に集約する。
 大きな作業履歴は `HISTORY.md` へ残す。

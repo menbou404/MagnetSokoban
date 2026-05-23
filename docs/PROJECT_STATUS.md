@@ -25,6 +25,7 @@
 - PHASE_09_BASICPUSH のマイルストーン作成
 - PHASE_10_ROTATION_GIMMICK のマイルストーン作成
 - PHASE_11_FIXED_MAGNETS のマイルストーン作成
+- フェーズ詳細文書を `docs/milestones/` に集約し、`active/`、`planned/`、`completed/` に状態別整理
 - PHASE_02_DATA_MODEL の実装
 - `MagneticBodyState` の導入
 - `GameState` / `LevelLoader` / Undo スナップショットの新データ構造対応
@@ -72,7 +73,7 @@
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
 次は Godot エディタ上で回帰確認面、複数箱押し確認面、回転床確認面、固定磁石確認面を実プレイ確認する段階である。
 文書は圧縮済みで、基本の読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
-着手フェーズの詳細は `docs/milestones/PHASE_*.md` を読む。
+フェーズ詳細はルート直下の `PHASE_XX.md` ではなく、`docs/milestones/README.md` から `active/`、`planned/`、`completed/` 配下の対象ファイルを読む。
 
 ## いま進める対象
 
