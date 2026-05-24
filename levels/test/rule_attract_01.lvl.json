@@ -2,7 +2,7 @@
   "id": "rule_attract_01",
   "name": "02 Rule Attract",
   "purpose": "basic attraction after pushing a stronger source magnet",
-  "description": "押された箱を起点に、異なる極の対象が 1 マス近づくことを確認する。",
+  "description": "常時磁場処理で、異なる極の 2 物体が引力方向へ動くことを確認する。",
   "tags": ["attract", "magnet"],
   "rows": [
     "###########",

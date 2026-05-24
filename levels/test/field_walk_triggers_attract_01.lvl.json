@@ -1,0 +1,18 @@
+{
+  "id": "field_walk_triggers_attract_01",
+  "name": "30 Field Walk Triggers Attract",
+  "purpose": "walking without pushing still settles the magnetic field",
+  "description": "プレイヤーが箱を押さずに歩いた後、盤面上の磁場が解決され、触れていない箱が固定磁石へ引き寄せられることを確認する。",
+  "tags": ["field", "walk", "attract", "fixed_magnet"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P........#",
+    "#...>......#",
+    "#..........#",
+    "############"
+  ],
+  "fixed_magnets": [
+    { "pos": [7, 3], "facing": "right", "strength": 3 }
+  ]
+}

@@ -51,8 +51,8 @@
       "name": "06 Rule Multi Push Dual Sources",
       "group": "test",
       "path": "res://levels/test/rule_multi_push_dual_sources_01.lvl.json",
-      "purpose": "all boxes moved by a push-line become primary magnet source candidates",
-      "description": "複数箱押しで同時に動いた箱のうち、前方側の箱も一次起点候補として磁力判定されることを確認する。",
+      "purpose": "multi-push is followed by whole-board magnetic field settlement",
+      "description": "複数箱押しで同時に動いた後、押した箱だけに限定せず盤面全体の磁場処理へ進むことを確認する。",
       "tags": ["push", "multi_push", "magnet", "source"]
     },
     {
@@ -60,8 +60,8 @@
       "name": "07 Rule Multi Push Then Magnet",
       "group": "test",
       "path": "res://levels/test/rule_multi_push_then_magnet_01.lvl.json",
-      "purpose": "magnet resolution runs after push-line movement",
-      "description": "押し列が成立した後に磁力処理へ進み、押しで同時に動いた箱が一次起点候補になることを確認する。",
+      "purpose": "field settlement runs after push-line movement",
+      "description": "押し列が成立した後に、常時磁場方式の盤面全体解決へ進むことを確認する。",
       "tags": ["push", "multi_push", "magnet"]
     },
     {
@@ -150,8 +150,8 @@
       "name": "17 Fixed Then Chain",
       "group": "test",
       "path": "res://levels/test/fixed_then_chain_01.lvl.json",
-      "purpose": "a box moved by a fixed magnet interaction is re-evaluated as a chain source candidate",
-      "description": "固定磁石との相互作用で動いた箱が、同じ手の中で次の起点候補として再評価されることを確認する。",
+      "purpose": "the whole board is re-evaluated after a fixed-magnet interaction",
+      "description": "固定磁石との相互作用で箱が動いた後、常時磁場方式で盤面全体が再評価されることを確認する。",
       "tags": ["fixed_magnet", "chain", "magnet"]
     },
     {
@@ -178,7 +178,7 @@
       "group": "test",
       "path": "res://levels/test/rule_attract_01.lvl.json",
       "purpose": "basic attraction after pushing a stronger source magnet",
-      "description": "押された箱を起点に、異なる極の対象が 1 マス近づくことを確認する。",
+      "description": "常時磁場処理で、異なる極の 2 物体が引力方向へ動くことを確認する。",
       "tags": ["attract", "magnet"]
     },
     {
@@ -187,7 +187,7 @@
       "group": "test",
       "path": "res://levels/test/rule_repel_01.lvl.json",
       "purpose": "basic repulsion after pushing a stronger source magnet",
-      "description": "押された箱を起点に、同じ極の対象が 1 マス遠ざかることを確認する。",
+      "description": "常時磁場処理で、同じ極の 2 物体が反発方向へ動くことを確認する。",
       "tags": ["repel", "magnet"]
     },
     {
@@ -195,8 +195,8 @@
       "name": "22 Rule Chain",
       "group": "test",
       "path": "res://levels/test/rule_chain_01.lvl.json",
-      "purpose": "magnet chain from moved body to next source",
-      "description": "磁力で動いた箱が次の起点になり、連鎖が順に進むことを確認する。",
+      "purpose": "field settlement re-evaluates the whole board after magnetic movement",
+      "description": "磁力で箱が動いた後、次の段階で盤面全体が再評価されることを確認する。",
       "tags": ["chain", "magnet"]
     },
     {
@@ -258,9 +258,63 @@
       "name": "29 View Chain Readability",
       "group": "test",
       "path": "res://levels/test/view_chain_readability_01.lvl.json",
-      "purpose": "chain order and trigger faces are readable",
-      "description": "磁力発動面、箱移動、次の起点への連鎖順が追えることを確認する。",
+      "purpose": "field settlement order and trigger faces are readable",
+      "description": "磁力発動面、箱移動、盤面再評価の順が追えることを確認する。",
       "tags": ["animation", "readability", "chain", "view"]
+    },
+    {
+      "id": "field_walk_triggers_attract_01",
+      "name": "30 Field Walk Triggers Attract",
+      "group": "test",
+      "path": "res://levels/test/field_walk_triggers_attract_01.lvl.json",
+      "purpose": "walking without pushing still settles the magnetic field",
+      "description": "プレイヤーが箱を押さずに歩いた後、盤面上の磁場が解決され、触れていない箱が固定磁石へ引き寄せられることを確認する。",
+      "tags": ["field", "walk", "attract", "fixed_magnet"]
+    },
+    {
+      "id": "field_fixed_source_attract_01",
+      "name": "31 Field Fixed Source Attract",
+      "group": "test",
+      "path": "res://levels/test/field_fixed_source_attract_01.lvl.json",
+      "purpose": "a fixed magnet acts as a field source for attraction",
+      "description": "固定磁石が磁場の起点になり、固定磁石自身は動かず可動箱だけが引力で近づくことを確認する。",
+      "tags": ["field", "fixed_magnet", "attract"]
+    },
+    {
+      "id": "field_fixed_source_repel_01",
+      "name": "32 Field Fixed Source Repel",
+      "group": "test",
+      "path": "res://levels/test/field_fixed_source_repel_01.lvl.json",
+      "purpose": "a fixed magnet acts as a field source for repulsion",
+      "description": "固定磁石が磁場の起点になり、固定磁石自身は動かず可動箱だけが反発方向へ動くことを確認する。",
+      "tags": ["field", "fixed_magnet", "repel"]
+    },
+    {
+      "id": "field_all_directions_01",
+      "name": "33 Field All Directions",
+      "group": "test",
+      "path": "res://levels/test/field_all_directions_01.lvl.json",
+      "purpose": "field settlement evaluates directions other than the input direction",
+      "description": "右への歩き移動後に、入力方向ではない上下方向の磁場候補が評価され、箱が下方向へ引き寄せられることを確認する。",
+      "tags": ["field", "all_directions", "attract"]
+    },
+    {
+      "id": "field_rotation_after_magnet_move_01",
+      "name": "34 Field Rotation After Magnet Move",
+      "group": "test",
+      "path": "res://levels/test/field_rotation_after_magnet_move_01.lvl.json",
+      "purpose": "rotation tiles apply after magnetic movement before the next field step",
+      "description": "磁力で動いた箱が右回転床へ入り、向きが更新された後、その向きで次の磁場評価が行われることを確認する。",
+      "tags": ["field", "rotation", "magnet"]
+    },
+    {
+      "id": "field_loop_guard_01",
+      "name": "35 Field Loop Guard",
+      "group": "test",
+      "path": "res://levels/test/field_loop_guard_01.lvl.json",
+      "purpose": "field settlement stops safely in a dense magnetic layout",
+      "description": "複数の固定磁石と可動箱が近い配置でも、最大ステップ数と同一盤面状態検知によりゲームが固まらないことを確認する。",
+      "tags": ["field", "loop_guard", "system"]
     }
   ]
 }

@@ -3,11 +3,102 @@ extends RefCounted
 
 const ActionEventScript := preload("res://scripts/core/ActionEvent.gd")
 const MagneticBodyStateScript := preload("res://scripts/core/MagneticBodyState.gd")
+const RotationResolverScript := preload("res://scripts/systems/RotationResolver.gd")
 const TurnResultScript := preload("res://scripts/core/TurnResult.gd")
 
 const INTERACTION_ATTRACT := "attract"
 const INTERACTION_REPEL := "repel"
 const INVALID_BODY_ID := -1
+const MAX_FIELD_SETTLE_STEPS := 128
+
+const FIELD_DIRECTIONS: Array[Vector2i] = [
+	Vector2i.UP,
+	Vector2i.RIGHT,
+	Vector2i.DOWN,
+	Vector2i.LEFT,
+]
+
+var _rotation_resolver: RefCounted
+
+
+func _init(rotation_resolver: RefCounted = null) -> void:
+	if rotation_resolver == null:
+		_rotation_resolver = RotationResolverScript.new()
+	else:
+		_rotation_resolver = rotation_resolver
+
+
+func settle_magnetic_field(
+	state: GameState,
+	turn_result: TurnResultScript
+) -> void:
+	var seen_state_keys := {}
+	var reached_max_steps := true
+
+	for step in range(MAX_FIELD_SETTLE_STEPS):
+		var state_key := _make_field_state_key(state)
+		if seen_state_keys.has(state_key):
+			push_warning("Magnetic field settle loop detected: %s" % state_key)
+			reached_max_steps = false
+			break
+
+		seen_state_keys[state_key] = true
+
+		var candidates := build_field_interaction_candidates(state)
+		if candidates.is_empty():
+			reached_max_steps = false
+			break
+
+		var selected_candidates := _get_strongest_candidates(candidates)
+		if selected_candidates.is_empty():
+			reached_max_steps = false
+			break
+
+		_add_magnet_trigger_events(turn_result, selected_candidates)
+
+		var moved_body_ids := resolve_interaction_candidates(
+			state,
+			selected_candidates,
+			turn_result
+		)
+
+		if moved_body_ids.is_empty():
+			reached_max_steps = false
+			break
+
+	if reached_max_steps:
+		push_warning("Magnetic field settle reached max steps: %d" % MAX_FIELD_SETTLE_STEPS)
+
+
+func build_field_interaction_candidates(state: GameState) -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = []
+	var seen_pairs := {}
+
+	for source_body in state.bodies:
+		var source := source_body as MagneticBodyStateScript
+		if source == null:
+			continue
+
+		for direction in FIELD_DIRECTIONS:
+			var candidate := build_interaction_candidate(state, source, direction)
+			if candidate.is_empty():
+				continue
+
+			var pair_key := _make_pair_key(
+				candidate["source_id"] as int,
+				candidate["target_id"] as int
+			)
+
+			if seen_pairs.has(pair_key):
+				var existing_index := seen_pairs[pair_key] as int
+				if _should_replace_duplicate_candidate(state, candidates[existing_index], candidate):
+					candidates[existing_index] = candidate
+				continue
+
+			seen_pairs[pair_key] = candidates.size()
+			candidates.append(candidate)
+
+	return candidates
 
 
 func apply_after_push(
@@ -117,16 +208,7 @@ func _process_source_batch(
 	if candidates.is_empty():
 		return _empty_body_id_list()
 
-	if turn_result != null:
-		var trigger_phase := turn_result.allocate_phase()
-		for candidate in candidates:
-			turn_result.add_event(ActionEventScript.magnet_trigger(
-				trigger_phase,
-				candidate["source_id"] as int,
-				direction,
-				candidate["target_id"] as int,
-				candidate["interaction_type"] as String
-			))
+	_add_magnet_trigger_events(turn_result, candidates)
 
 	return resolve_interaction_candidates(state, candidates, turn_result)
 
@@ -601,12 +683,17 @@ func _are_planned_moves_valid(state: GameState, planned_moves: Array[Dictionary]
 
 
 func apply_planned_moves(state: GameState, planned_moves: Array[Dictionary]) -> void:
+	var moved_bodies: Array = []
+
 	for planned_move in planned_moves:
 		var body := state.get_body_by_id(planned_move["body_id"] as int)
 		if body == null:
 			continue
 
 		body.pos = planned_move["to"] as Vector2i
+		moved_bodies.append(body)
+
+	_rotation_resolver.apply_rotation_tiles(state, moved_bodies)
 
 
 func _add_body_move_event(
@@ -722,6 +809,79 @@ func _candidate_has_fixed_magnet(state: GameState, candidate: Dictionary) -> boo
 	if target != null and target.is_fixed_magnet():
 		return true
 	return false
+
+
+func _get_strongest_candidates(candidates: Array[Dictionary]) -> Array[Dictionary]:
+	var selected: Array[Dictionary] = []
+	if candidates.is_empty():
+		return selected
+
+	var strongest_priority := -1
+	for candidate in candidates:
+		strongest_priority = maxi(strongest_priority, candidate["priority_score"] as int)
+
+	for candidate in candidates:
+		if (candidate["priority_score"] as int) == strongest_priority:
+			selected.append(candidate)
+
+	return selected
+
+
+func _add_magnet_trigger_events(
+	turn_result: TurnResultScript,
+	candidates: Array[Dictionary]
+) -> void:
+	if turn_result == null or candidates.is_empty():
+		return
+
+	var trigger_phase := turn_result.allocate_phase()
+	for candidate in candidates:
+		turn_result.add_event(ActionEventScript.magnet_trigger(
+			trigger_phase,
+			candidate["source_id"] as int,
+			candidate["direction"] as Vector2i,
+			candidate["target_id"] as int,
+			candidate["interaction_type"] as String
+		))
+
+
+func _make_pair_key(a: int, b: int) -> String:
+	var low := mini(a, b)
+	var high := maxi(a, b)
+	return "%d:%d" % [low, high]
+
+
+func _should_replace_duplicate_candidate(
+	state: GameState,
+	current_candidate: Dictionary,
+	next_candidate: Dictionary
+) -> bool:
+	var current_source := state.get_body_by_id(current_candidate["source_id"] as int)
+	var next_source := state.get_body_by_id(next_candidate["source_id"] as int)
+
+	if current_source == null or next_source == null:
+		return false
+
+	return next_source.is_fixed_magnet() and not current_source.is_fixed_magnet()
+
+
+func _make_field_state_key(state: GameState) -> String:
+	var parts: Array[String] = []
+
+	for body in state.bodies:
+		parts.append("%d:%s:%d,%d:%d,%d:%d:%s" % [
+			body.id,
+			body.kind,
+			body.pos.x,
+			body.pos.y,
+			body.facing.x,
+			body.facing.y,
+			body.strength,
+			str(body.movable),
+		])
+
+	parts.sort()
+	return "|".join(parts)
 
 
 func _empty_body_id_list() -> Array[int]:

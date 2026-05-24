@@ -28,11 +28,12 @@
 
 | フェーズ | 状態 | 詳細 |
 | --- | --- | --- |
+| PHASE_12_CONTINUOUS_MAGNET_FIELD | 最小実装完了 / 実プレイ確認待ち | `active/PHASE_12_CONTINUOUS_MAGNET_FIELD.md` |
 | PHASE_09_BASICPUSH | 最小実装完了 | `completed/PHASE_09_BASICPUSH.md` |
 | PHASE_10_ROTATION_GIMMICK | 最小実装完了 | `completed/PHASE_10_ROTATION_GIMMICK.md` |
 | PHASE_11_FIXED_MAGNETS | 最小実装完了 | `completed/PHASE_11_FIXED_MAGNETS.md` |
 
 ## 次フェーズ
 
-未定。
-PHASE_11 の実プレイ確認後、次の正式フェーズを決める。
+PHASE_12_CONTINUOUS_MAGNET_FIELD は最小実装完了。
+実プレイ確認後、次の正式フェーズを決める。

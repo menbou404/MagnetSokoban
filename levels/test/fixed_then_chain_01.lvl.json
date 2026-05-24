@@ -1,8 +1,8 @@
 {
   "id": "fixed_then_chain_01",
   "name": "17 Fixed Then Chain",
-  "purpose": "a box moved by a fixed magnet interaction is re-evaluated as a chain source candidate",
-  "description": "固定磁石との相互作用で動いた箱が、同じ手の中で次の起点候補として再評価されることを確認する。",
+  "purpose": "the whole board is re-evaluated after a fixed-magnet interaction",
+  "description": "固定磁石との相互作用で箱が動いた後、常時磁場方式で盤面全体が再評価されることを確認する。",
   "tags": ["fixed_magnet", "chain", "magnet"],
   "rows": [
     "###########",

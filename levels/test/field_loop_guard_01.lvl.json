@@ -1,0 +1,19 @@
+{
+  "id": "field_loop_guard_01",
+  "name": "35 Field Loop Guard",
+  "purpose": "field settlement stops safely in a dense magnetic layout",
+  "description": "複数の固定磁石と可動箱が近い配置でも、最大ステップ数と同一盤面状態検知によりゲームが固まらないことを確認する。",
+  "tags": ["field", "loop_guard", "system"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P........#",
+    "#....<.....#",
+    "#..........#",
+    "############"
+  ],
+  "fixed_magnets": [
+    { "pos": [3, 3], "facing": "right", "strength": 3 },
+    { "pos": [8, 3], "facing": "left", "strength": 3 }
+  ]
+}

@@ -2,22 +2,29 @@ class_name MoveResolver
 extends RefCounted
 
 const ActionEventScript := preload("res://scripts/core/ActionEvent.gd")
+const RotationResolverScript := preload("res://scripts/systems/RotationResolver.gd")
 const TurnResultScript := preload("res://scripts/core/TurnResult.gd")
 
 var _magnet_resolver: MagnetResolver
 var _win_checker: WinChecker
 var _undo_history: UndoHistory
+var _rotation_resolver: RefCounted
 var _next_turn_id := 1
 
 
 func _init(
 	magnet_resolver: MagnetResolver,
 	win_checker: WinChecker,
-	undo_history: UndoHistory
+	undo_history: UndoHistory,
+	rotation_resolver: RefCounted = null
 ) -> void:
 	_magnet_resolver = magnet_resolver
 	_win_checker = win_checker
 	_undo_history = undo_history
+	if rotation_resolver == null:
+		_rotation_resolver = RotationResolverScript.new()
+	else:
+		_rotation_resolver = rotation_resolver
 
 
 func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
@@ -34,7 +41,6 @@ func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
 
 	var body := state.get_body_at(next_pos)
 	var pushed_body_moves: Array[Dictionary] = []
-	var primary_source_ids: Array[int] = []
 	var player_from := state.player_pos
 
 	if body != null:
@@ -54,10 +60,9 @@ func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
 
 		for index in range(push_line.size() - 1, -1, -1):
 			var pushed_body: MagneticBodyState = push_line[index]
-			primary_source_ids.append(pushed_body.id)
 			pushed_body.pos += dir
 
-		_apply_rotation_tiles(state, push_line)
+		_rotation_resolver.apply_rotation_tiles(state, push_line)
 
 		state.player_pos = next_pos
 		state.move_count += 1
@@ -89,8 +94,7 @@ func try_move(state: GameState, dir: Vector2i) -> TurnResultScript:
 			"push"
 		))
 
-	if not primary_source_ids.is_empty():
-		_magnet_resolver.apply_after_push_sources(state, primary_source_ids, dir, result)
+	_magnet_resolver.settle_magnetic_field(state, result)
 
 	state.cleared = _win_checker.is_cleared(state)
 	result.did_clear = state.cleared
@@ -129,37 +133,3 @@ func _build_body_move_events(push_line: Array, dir: Vector2i) -> Array[Dictionar
 		})
 
 	return moves
-
-
-func _apply_rotation_tiles(state: GameState, moved_bodies: Array) -> void:
-	for body in moved_bodies:
-		var moved_body := body as MagneticBodyState
-		var rotation := state.get_rotation_at(moved_body.pos)
-		if rotation == "":
-			continue
-
-		moved_body.facing = _rotate_facing(moved_body.facing, rotation)
-
-
-func _rotate_facing(facing: Vector2i, rotation: String) -> Vector2i:
-	if rotation == "right":
-		if facing == Vector2i.UP:
-			return Vector2i.RIGHT
-		if facing == Vector2i.RIGHT:
-			return Vector2i.DOWN
-		if facing == Vector2i.DOWN:
-			return Vector2i.LEFT
-		if facing == Vector2i.LEFT:
-			return Vector2i.UP
-
-	if rotation == "left":
-		if facing == Vector2i.UP:
-			return Vector2i.LEFT
-		if facing == Vector2i.LEFT:
-			return Vector2i.DOWN
-		if facing == Vector2i.DOWN:
-			return Vector2i.RIGHT
-		if facing == Vector2i.RIGHT:
-			return Vector2i.UP
-
-	return facing

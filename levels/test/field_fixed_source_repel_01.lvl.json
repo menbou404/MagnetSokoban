@@ -1,0 +1,18 @@
+{
+  "id": "field_fixed_source_repel_01",
+  "name": "32 Field Fixed Source Repel",
+  "purpose": "a fixed magnet acts as a field source for repulsion",
+  "description": "固定磁石が磁場の起点になり、固定磁石自身は動かず可動箱だけが反発方向へ動くことを確認する。",
+  "tags": ["field", "fixed_magnet", "repel"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P........#",
+    "#....<.....#",
+    "#..........#",
+    "############"
+  ],
+  "fixed_magnets": [
+    { "pos": [3, 3], "facing": "right", "strength": 3 }
+  ]
+}

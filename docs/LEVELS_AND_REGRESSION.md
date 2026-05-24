@@ -89,6 +89,7 @@ levels/
 ## 回帰確認方針
 
 新ギミック追加前後に、既存ルールが壊れていないことを `levels/test/` で確認する。
+PHASE_12 では磁力が押し後起点方式から常時磁場方式へ変わるため、押し後だけ磁力が発動する前提の確認面は期待挙動を見直す。
 
 基本ルール:
 
@@ -104,6 +105,7 @@ levels/
 - 複数箱の通常押し
 - 回転床
 - 固定磁石
+- 常時磁場
 - 引力
 - 反発
 - 連鎖
@@ -115,6 +117,14 @@ levels/
 - アニメーション中入力停止
 - 連鎖順の可視性
 
+PHASE_12 で追加した確認対象:
+
+- 歩いただけで磁場処理が走る
+- 固定磁石が起点になる
+- 押した方向以外の磁場候補が評価される
+- 磁力移動後に回転床が適用される
+- 安定しない配置でもループ対策で停止する
+
 ## 現在の確認面
 
 - `rule_push_01`: 基本移動、箱押し、壁、ゴール
@@ -122,8 +132,8 @@ levels/
 - `rule_multi_push_three_01`: 3 個以上の箱を同じ押し列処理で押す
 - `rule_multi_push_blocked_01`: 押し列の先頭が壁で止まる
 - `rule_multi_push_gap_01`: 空きマスで押し列が切れる
-- `rule_multi_push_dual_sources_01`: 押しで同時に動いた箱が一次起点候補になる
-- `rule_multi_push_then_magnet_01`: 押し列成立後に磁力処理へ進む
+- `rule_multi_push_dual_sources_01`: 複数箱押し後に盤面全体の磁場処理へ進む
+- `rule_multi_push_then_magnet_01`: 押し列成立後に常時磁場処理へ進む
 - `system_multi_push_undo_01`: 複数箱押し後の Undo
 - `rotation_right_01`: 右回転床で箱が 90 度右回転する
 - `rotation_left_01`: 左回転床で箱が 90 度左回転する
@@ -133,19 +143,38 @@ levels/
 - `fixed_attract_01`: 固定磁石に対して箱が引力を受ける
 - `fixed_repel_01`: 固定磁石に対して箱が反発を受ける
 - `fixed_block_push_01`: 固定磁石が押せず、押し列を止める
-- `fixed_then_chain_01`: 固定磁石との相互作用で動いた箱が連鎖起点になる
+- `fixed_then_chain_01`: 固定磁石との相互作用後に盤面全体が再評価される
 - `fixed_with_rotation_01`: 回転後の向きで固定磁石に反応する
 - `fixed_undo_01`: 固定磁石相互作用後の Undo
 - `rule_attract_01`: 引力
 - `rule_repel_01`: 反発
-- `rule_chain_01`: 連鎖
+- `rule_chain_01`: 磁場移動後の盤面再評価
 - `rule_priority_01`: 強さ優先
 - `rule_simultaneous_01`: 同強度同時処理
 - `system_undo_01`: Undo
 - `system_reset_01`: Reset
 - `system_reload_01`: レベル切替 / 再読込
 - `view_animation_lock_01`: アニメーション中入力停止
-- `view_chain_readability_01`: 連鎖順と磁力発動面の可読性
+- `view_chain_readability_01`: 磁場再評価順と磁力発動面の可読性
+- `field_walk_triggers_attract_01`: 歩き移動後にも磁場処理が走る
+- `field_fixed_source_attract_01`: 固定磁石を起点にした引力
+- `field_fixed_source_repel_01`: 固定磁石を起点にした反発
+- `field_all_directions_01`: 入力方向に限定されない上下左右の磁場評価
+- `field_rotation_after_magnet_move_01`: 磁力移動後の回転床適用
+- `field_loop_guard_01`: 安定しない可能性がある配置のループ対策
+
+## 追加予定の確認面
+
+次フェーズが正式化された時点で追加する。
+
+## PHASE_12 で追加した確認面
+
+- `field_walk_triggers_attract_01`: 歩き移動後にも磁場処理が走る
+- `field_fixed_source_attract_01`: 固定磁石を起点にした引力
+- `field_fixed_source_repel_01`: 固定磁石を起点にした反発
+- `field_all_directions_01`: 入力方向に限定されない上下左右の磁場評価
+- `field_rotation_after_magnet_move_01`: 磁力移動後の回転床適用
+- `field_loop_guard_01`: 安定しない配置のループ対策
 
 ## まだやらないこと
 

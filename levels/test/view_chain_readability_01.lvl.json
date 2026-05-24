@@ -1,8 +1,8 @@
 {
   "id": "view_chain_readability_01",
   "name": "11 View Chain Readability",
-  "purpose": "chain order and trigger faces are readable",
-  "description": "磁力発動面、箱移動、次の起点への連鎖順が追えることを確認する。",
+  "purpose": "field settlement order and trigger faces are readable",
+  "description": "磁力発動面、箱移動、盤面再評価の順が追えることを確認する。",
   "tags": ["animation", "readability", "chain", "view"],
   "rows": [
     "#############",

@@ -6,6 +6,25 @@
 
 新しい記録は上に追加する。
 
+## 2026-05-24
+
+### PHASE_12_CONTINUOUS_MAGNET_FIELD 実装
+
+磁力処理を押し後起点方式から、有効な 1 手の後に盤面全体を安定するまで評価する常時磁場方式へ移行した。
+`MoveResolver.gd` は押しの有無に関係なく、有効手の後に `MagnetResolver.settle_magnetic_field()` を呼ぶようにした。
+`MagnetResolver.gd` に全磁力物体・上下左右の候補収集、同一 2 物体ペアの重複排除、最強候補選別、最大 128 ステップと同一盤面状態検知によるループガードを追加した。
+固定磁石も磁場の起点に含め、固定磁石自身は移動しない既存可動性ルールを維持した。
+`RotationResolver.gd` を追加し、通常押しと磁力移動の両方で、箱が回転床へ入った直後に向きを更新できるようにした。
+`levels/test/` に `field_*` 6 面を追加し、`levels/level_catalog.json` に登録した。
+Godot headless 起動、PHASE_12 用スモーク確認、JSON 読み込み確認を行った。
+
+### PHASE_12_CONTINUOUS_MAGNET_FIELD 文書反映
+
+`docs/milestones/active/PHASE_12_CONTINUOUS_MAGNET_FIELD.md` を現在の着手対象として扱うため、`docs/PHASES.md`、`docs/milestones/README.md`、`docs/milestones/active/README.md` を更新した。
+常時磁場方式への移行に合わせ、`docs/SPEC.md` と `docs/CORE_DESIGN.md` の磁力処理記述を、押し後起点方式から有効な 1 手後の盤面全体安定化方式へ更新した。
+`docs/PROJECT_STATUS.md`、`docs/LEVELS_AND_REGRESSION.md`、`AGENTS.md` に、PHASE_12 の現在地、確認面方針、正式方針の変更を反映した。
+この時点ではコード実装とレベル追加は未着手であり、次に `MoveResolver.gd` と `MagnetResolver.gd` へ常時磁場処理を実装する。
+
 ## 2026-05-23
 
 ### milestones 内整理

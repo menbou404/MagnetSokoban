@@ -1,0 +1,19 @@
+{
+  "id": "field_rotation_after_magnet_move_01",
+  "name": "34 Field Rotation After Magnet Move",
+  "purpose": "rotation tiles apply after magnetic movement before the next field step",
+  "description": "磁力で動いた箱が右回転床へ入り、向きが更新された後、その向きで次の磁場評価が行われることを確認する。",
+  "tags": ["field", "rotation", "magnet"],
+  "rows": [
+    "#############",
+    "#.P.........#",
+    "#....^......#",
+    "#....]..<...#",
+    "#...........#",
+    "#...........#",
+    "#############"
+  ],
+  "fixed_magnets": [
+    { "pos": [5, 5], "facing": "up", "strength": 3 }
+  ]
+}

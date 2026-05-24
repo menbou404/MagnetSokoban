@@ -1,8 +1,8 @@
 {
   "id": "rule_multi_push_dual_sources_01",
   "name": "06 Rule Multi Push Dual Sources",
-  "purpose": "all boxes moved by a push-line become primary magnet source candidates",
-  "description": "複数箱押しで同時に動いた箱のうち、前方側の箱も一次起点候補として磁力判定されることを確認する。",
+  "purpose": "multi-push is followed by whole-board magnetic field settlement",
+  "description": "複数箱押しで同時に動いた後、押した箱だけに限定せず盤面全体の磁場処理へ進むことを確認する。",
   "tags": ["push", "multi_push", "magnet", "source"],
   "rows": [
     "#############",

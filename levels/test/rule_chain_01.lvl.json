@@ -1,8 +1,8 @@
 {
   "id": "rule_chain_01",
   "name": "04 Rule Chain",
-  "purpose": "magnet chain from moved body to next source",
-  "description": "磁力で動いた箱が次の起点になり、連鎖が順に進むことを確認する。",
+  "purpose": "field settlement re-evaluates the whole board after magnetic movement",
+  "description": "磁力で箱が動いた後、次の段階で盤面全体が再評価されることを確認する。",
   "tags": ["chain", "magnet"],
   "rows": [
     "############",

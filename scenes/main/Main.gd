@@ -1,6 +1,7 @@
 extends Node2D
 
 const AnimationDirectorScript := preload("res://scripts/systems/AnimationDirector.gd")
+const RotationResolverScript := preload("res://scripts/systems/RotationResolver.gd")
 
 var level_index := 0
 var level_entries: Array[Dictionary] = []
@@ -11,14 +12,15 @@ var game_state: GameState
 var level_loader := LevelLoader.new()
 var undo_history := UndoHistory.new()
 var win_checker := WinChecker.new()
-var magnet_resolver := MagnetResolver.new()
+var rotation_resolver := RotationResolverScript.new()
+var magnet_resolver := MagnetResolver.new(rotation_resolver)
 var animation_director := AnimationDirectorScript.new()
 var move_resolver: MoveResolver
 var is_animating := false
 
 
 func _ready() -> void:
-	move_resolver = MoveResolver.new(magnet_resolver, win_checker, undo_history)
+	move_resolver = MoveResolver.new(magnet_resolver, win_checker, undo_history, rotation_resolver)
 	level_entries = level_loader.get_level_entries("test")
 	_load_current_level()
 

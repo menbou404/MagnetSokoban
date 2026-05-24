@@ -1,0 +1,18 @@
+{
+  "id": "field_fixed_source_attract_01",
+  "name": "31 Field Fixed Source Attract",
+  "purpose": "a fixed magnet acts as a field source for attraction",
+  "description": "固定磁石が磁場の起点になり、固定磁石自身は動かず可動箱だけが引力で近づくことを確認する。",
+  "tags": ["field", "fixed_magnet", "attract"],
+  "rows": [
+    "############",
+    "#..........#",
+    "#.P........#",
+    "#...>......#",
+    "#..........#",
+    "############"
+  ],
+  "fixed_magnets": [
+    { "pos": [7, 3], "facing": "right", "strength": 3 }
+  ]
+}

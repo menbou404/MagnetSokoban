@@ -2,7 +2,7 @@
   "id": "rule_repel_01",
   "name": "03 Rule Repel",
   "purpose": "basic repulsion after pushing a stronger source magnet",
-  "description": "押された箱を起点に、同じ極の対象が 1 マス遠ざかることを確認する。",
+  "description": "常時磁場処理で、同じ極の 2 物体が反発方向へ動くことを確認する。",
   "tags": ["repel", "magnet"],
   "rows": [
     "###########",

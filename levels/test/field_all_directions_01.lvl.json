@@ -1,0 +1,19 @@
+{
+  "id": "field_all_directions_01",
+  "name": "33 Field All Directions",
+  "purpose": "field settlement evaluates directions other than the input direction",
+  "description": "右への歩き移動後に、入力方向ではない上下方向の磁場候補が評価され、箱が下方向へ引き寄せられることを確認する。",
+  "tags": ["field", "all_directions", "attract"],
+  "rows": [
+    "###########",
+    "#.........#",
+    "#.P..^....#",
+    "#.........#",
+    "#.........#",
+    "#.........#",
+    "###########"
+  ],
+  "fixed_magnets": [
+    { "pos": [5, 5], "facing": "up", "strength": 3 }
+  ]
+}

@@ -26,6 +26,7 @@
 - PHASE_10_ROTATION_GIMMICK のマイルストーン作成
 - PHASE_11_FIXED_MAGNETS のマイルストーン作成
 - フェーズ詳細文書を `docs/milestones/` に集約し、`active/`、`planned/`、`completed/` に状態別整理
+- PHASE_12_CONTINUOUS_MAGNET_FIELD の実装指示文書作成
 - PHASE_02_DATA_MODEL の実装
 - `MagneticBodyState` の導入
 - `GameState` / `LevelLoader` / Undo スナップショットの新データ構造対応
@@ -60,18 +61,26 @@
 - PHASE_11_FIXED_MAGNETS の最小実装
 - 固定磁石のレベル読込、非可動磁力物体としての保持、表示対応
 - 固定磁石に対する引力 / 反発、押し停止、回転床連携の確認面追加
+- PHASE_12_CONTINUOUS_MAGNET_FIELD の最小実装
+- 有効な 1 手後に盤面全体を安定するまで解決する常時磁場処理
+- 固定磁石を含む全磁力物体の上下左右候補収集、重複ペア除外、強さ優先、ループガード
+- 磁力移動後の回転床適用を共通化する `RotationResolver.gd` の追加
+- 常時磁場方式の確認面 6 面追加
 
 ### 現在地
 
-仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS、PHASE_09_BASICPUSH、PHASE_10_ROTATION_GIMMICK、PHASE_11_FIXED_MAGNETS の最小実装は完了。
+仕様整理フェーズ、PHASE_02_DATA_MODEL、PHASE_03_MAGNET_CORE、PHASE_04_CONFLICT_RESOLUTION、PHASE_05_GAMEPLAY_CONTENT、PHASE_06_ANIMATION_READABILITY、PHASE_07_LEVEL_PIPELINE、PHASE_08_RULE_REGRESSION_TESTS、PHASE_09_BASICPUSH、PHASE_10_ROTATION_GIMMICK、PHASE_11_FIXED_MAGNETS、PHASE_12_CONTINUOUS_MAGNET_FIELD の最小実装は完了。
 箱は `MagneticBodyState` により、位置・向き・強さ・可動性を持つ磁力物体として保持されている。  
-箱を押した直後にだけ、押された箱を起点として直線探索、距離判定、引力 / 反発、連鎖処理を行う。
+有効な 1 手の後に盤面全体の磁力物体を起点候補として、上下左右の磁場候補を評価し、盤面が安定するまで磁場処理を行う。
 競合解決では、強さが異なる場合に強い側を優先し、同強度の場合は両者を 1 マスずつ同時に動かす。
+常時磁場方式では、最大磁場解決ステップ数と同一盤面状態検知で安定しない配置を停止する。
+固定磁石も磁場の起点になり、固定磁石自身は移動しない。
+磁力で動いた箱が回転床へ入った場合も向きが更新される。
 1 手の結果は `TurnResult` / `ActionEvent` のイベント列として生成され、`AnimationDirector` が `BoardView` の表示専用状態を使って phase 順に再生する。
 再生中は新しい入力を受け付けない。
-確認用レベルは `levels/test/` の `.lvl.json` として 29 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
+確認用レベルは `levels/test/` の `.lvl.json` として 35 面に整理され、`levels/level_catalog.json` の順序で N / B キー切り替えができる。
 `Main.gd` はレベル本文を持たず、現在のレベルインデックスとカタログ entry だけを扱う。
-次は Godot エディタ上で回帰確認面、複数箱押し確認面、回転床確認面、固定磁石確認面を実プレイ確認する段階である。
+PHASE_12 用スモーク確認と Godot headless 起動確認は実施済み。
 文書は圧縮済みで、基本の読む対象は `README.md`、`PROJECT_STATUS.md`、`SPEC.md`、`CORE_DESIGN.md`、`LEVELS_AND_REGRESSION.md`、`PHASES.md`、`HISTORY.md` に整理されている。
 フェーズ詳細はルート直下の `PHASE_XX.md` ではなく、`docs/milestones/README.md` から `active/`、`planned/`、`completed/` 配下の対象ファイルを読む。
 
@@ -79,9 +88,9 @@
 
 ### 直近の最優先
 
-1. Godot エディタ上で 29 面の確認セットを実プレイ確認する
-2. 新ギミック追加前後に `levels/test/` の確認面を一通り確認する運用を定着させる
-3. 次の正式フェーズを決める
+1. Godot エディタ上で PHASE_12 確認面と既存回帰確認面を実プレイ確認する
+2. 常時磁場方式で挙動が変わる既存確認面の説明を必要に応じてさらに整理する
+3. 次フェーズ候補を正式化する場合は、先に `docs/` と `docs/milestones/` を更新する
 
 ### 直近で触らないもの
 
@@ -96,10 +105,10 @@
 
 ## 現在の暫定ルール
 
-- 同じ起点は 1 手で 1 回しか磁力判定しない
 - 強い磁力の厳密な比較式は未確定
 - 同強度時は両側を同時に同距離動かす
-- 無限ループは将来ギミック化予定だが現時点では未実装
+- 常時磁場方式では最大ステップ数と同一盤面状態検知で無限ループを止める
+- ループ検出のゲーム内ギミック化は将来予定だが現時点では行わない
 - アニメーションは確定済みの論理結果をイベント列として再生する
 - 再生中は新しい入力を受け付けない
 - レベル内容は `Main.gd` に直書きせず、`levels/` 配下へ移す
@@ -109,9 +118,9 @@
 
 ## 次に完了させるべき状態
 
-PHASE_11_FIXED_MAGNETS のコード上の完了条件は満たした。
+PHASE_12_CONTINUOUS_MAGNET_FIELD のコード上の完了条件は満たした。
 次に完了させるべき状態は以下。
 
-1. Godot エディタ上で PHASE_11 確認面を実プレイ確認する
-2. 既存回帰確認面、複数箱押し確認面、回転床確認面、固定磁石確認面を一通り確認する
-3. 次の正式フェーズ文書を作る
+1. Godot エディタ上で `field_*` 確認面を実プレイ確認する
+2. 既存の通常押し、磁力、競合、回転床、固定磁石、アニメーション、レベル運用の回帰確認を行う
+3. 次フェーズの仕様を正式化する場合は、文書を先に更新する
